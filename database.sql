@@ -18,7 +18,16 @@ INSERT INTO category (name) VALUES
 ('Utvikling'),
 ('Drift'),
 ('Brukerstøtte'),
-('Media');
+('Media'),
+('Teknologiforståelse'),
+('Yrkesfaglig fordypning'),
+('Konseptutvikling og programmering'),
+('Matematikk 1P-Y - IM'),
+('Engelsk'),
+('Naturfag'),
+('Kroppsøving'),
+('Norsk'),
+('Samfunnskunnskap');
 
 CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,5 +59,5 @@ CREATE TABLE project (
 
 INSERT INTO project (name, description, category, status, completedBy) VALUES
 ('Valgomat', 'Lag en webapp for hvilke parti du er mest enig med', 1, 'fullført', 1),
-('powerToys', 'Lag en brukerveiledning for to funksjoner i powertoys', 3, 'fullført', 1),
+('PowerToys', 'Lag en brukerveiledning for to funksjoner i powertoys', 3, 'fullført', 1),
 ('Julefilm', 'Lag en video om julen', 4, 'fullført', 1);

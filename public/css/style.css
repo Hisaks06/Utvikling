@@ -174,28 +174,6 @@ margin-bottom: 0;
   }
 }
 
-.sum{
-  color: #000000;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-left:10px;
-  object-position: center;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.stats{
-  color: #000000;
-  border: none;
-  cursor: pointer;
-  object-position: center;
-  text-decoration: none;
-  display: inline-block;
-}
-
 #loginForm {
   display: block;
   justify-content: space-between;
@@ -220,7 +198,7 @@ body {
   background-color: var(--background-color-light);
   color: var(--text-color-light);
   margin: 0;
-  background-image: url("img/cool-background.png");
+  background-image: url("img/test.png");
   background-repeat: no-repeat;
   background-size: cover;
 }
