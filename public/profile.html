@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html">Hjem</a>  
+        <a href="admin.html">Admin</a>
+        <a href="projects.html">Prosjekter</a>
+        <div class="login">
+            <a href="profile.html" class="active">Profile</a>
+            <a href="login.html">Log out</a>
+        </div>
+    </div>
+    <header>
+        <h1>Bruker Profil: <span id="userId"></span></h1>
+    </header>
+    <main>
+    
+        <section class="user-info">
+            <form>
+            <h2>Bruker Informasjon</h2>
+            <p><strong>Brukernavn:</strong> <span id="username"></span></p>
+            <p><strong>ForNavn:</strong> <span id="firstName"></span></p>
+            <p><strong>EtterNavn:</strong> <span id="lastName"></span></p>
+            <p><strong>Rolle:</strong> <span id="role"></span></p>
+            </form>
+
+            <br>
+            <form>
+            <!-- Notification Section -->
+            <div id="notificationSection">
+                <h2>Varsler</h2>
+                <ul id="notificationList"></ul>
+            </div>
+            </form>
+            </form>
+                <div id="inviteFeedback"></div>
+            </main> 
+        </section>
+    </main>
+    <footer>
+    </footer>
+
+    <script src="js/web.js"></script>
+</body>
+</html>
