@@ -113,7 +113,7 @@ margin-bottom: 0;
 /* Style the top navigation bar */
 .navbar {
   overflow: hidden;
-  background-color: #1a81a4;
+  background-color: rgba(0, 0, 0, 0.850);
 }
 
 /* Style the navigation bar links */
@@ -139,7 +139,7 @@ margin-bottom: 0;
 }
 
 .navbar .active {
-  background-color: #008CBA;
+  background-color: rgba(70, 71, 92, 0.500);
 }
 
 /* Add animation on hover */
@@ -231,7 +231,7 @@ body.dark-mode {
   height: 250px;
   border-radius: 50%;
   margin: 0 20px;
-  background: radial-gradient(transparent 40%,#99F443 40%);
+  background: radial-gradient(transparent 40%,silver 40%);
   animation: gear1 6s linear infinite;
 }
 @keyframes gear1{
@@ -243,7 +243,7 @@ body.dark-mode {
   }
 }
 .wrapper2 .gear{
-  background: radial-gradient(transparent 40%,#EC449B 40%);
+  background: radial-gradient(transparent 40%,grey 40%);
   animation: gear2 6s linear infinite;
 }
 @keyframes gear2{
@@ -257,7 +257,7 @@ body.dark-mode {
 .wrapper .gear span{
   display:block;
   position:absolute;
-  background: linear-gradient(to top, transparent 70%,#99F443 30%);
+  background: linear-gradient(to top, transparent 70%,silver 30%);
   height: 160px;
   width: 70px;
   top: -35px;
@@ -267,7 +267,7 @@ body.dark-mode {
   transform: translateX(-50%) rotate(calc(var(--i)* 60deg));
 }
 .wrapper2 .gear span{
-  background: linear-gradient(to top, transparent 70%,#EC449B 30%);
+  background: linear-gradient(to top, transparent 70%,grey 30%);
 }
 .cog{
   position: relative;
