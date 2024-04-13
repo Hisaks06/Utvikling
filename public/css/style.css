@@ -210,3 +210,12 @@ body.dark-mode {
   background-color: var(--background-color-dark);
   color: var(--text-color-dark);
 }
+
+.container {
+  display: flex;
+}
+
+.vg1, .vg2, .vg3 {
+  flex: 1;
+  margin: 0 auto; /* Optional: Centers the content within each container */
+}
