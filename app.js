@@ -214,7 +214,7 @@ app.get('/currentUser', checkLoggedIn,  (req, res) => {
 });
 
 app.get('/', checkLoggedIn, (req, res) => {
-    res.sendFile(path.join(__dirname, "public/app.html"));
+    res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 app.get('/users', checkLoggedIn,  (req, res) => {
