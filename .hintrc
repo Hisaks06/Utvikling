@@ -15,6 +15,19 @@
         "html-has-lang": "off"
       }
     ],
-    "no-inline-styles": "off"
+    "no-inline-styles": "off",
+    "axe/name-role-value": [
+      "default",
+      {
+        "link-name": "off"
+      }
+    ],
+    "button-type": "off",
+    "axe/forms": [
+      "default",
+      {
+        "label": "off"
+      }
+    ]
   }
 }

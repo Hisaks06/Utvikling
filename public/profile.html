@@ -7,17 +7,27 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 </head>
 <body>
-    <div class="navbar">
-        <a href="index.html">Hjem</a>  
-        <a href="admin.html">Admin</a>
-        <a href="projects.html">Prosjekter</a>
-        <div class="login">
-            <a href="profile.html" class="active">Profile</a>
-            <a href="login.html">Log out</a>
-        </div>
+
+    <input type="checkbox" name="" id="check">
+    <div class="menu">
+        <label for="check" id="label" style="
+        margin-bottom: 0px;">
+            <span class="fas fa-times" id="times"></span>
+            <span class="fas fa-bars" id="bars"></span>
+        </label>
+        <div class="head">Meny</div>
+        <ol>
+            <li class="nav"><a href="index.html" class="tab"><i class="fas fa-home"></i>Hjem</a></li>
+            <li class="nav"><a href="profile.html" class="tab"><i class="fas fa-user"></i>Profil</a></li>
+            <li class="nav"><a href="admin.html" class="tab"><i class="fas fa-user-cog"></i>Admin</a></li>
+            <li class="nav"><a href="projects.html" class="tab"><i class="fas fa-project-diagram"></i>Prosjekt</a></li>
+            <li class="nav"><a href="login.html" class="tab"><i class="fas fa-door-open"></i>Logg Ut</a></li>
+        </ol>
     </div>
+    <br>
     <header>
         <h1>Bruker Profil: <span id="userId"></span></h1>
     </header>
@@ -30,6 +40,8 @@
             <p><strong>Fornavn:</strong> <span id="firstName"></span></p>
             <p><strong>Etternavn:</strong> <span id="lastName"></span></p>
             <p><strong>Rolle:</strong> <span id="role"></span></p>
+            <button>Rediger</button>
+            <button>Slett Bruker</button>
             </form>
 
             <br>
