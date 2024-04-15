@@ -474,3 +474,96 @@ span{
 .hide {
   display: none !important;
 }
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Ruda:wght@400;600;700&display=swap");
+:root {
+  --calendar-bg-color: #262829;
+  --calendar-font-color: #fff;
+  --weekdays-border-bottom-color: #404040;
+  --calendar-date-hover-color: #b3b3b3;
+  --calendar-dummy-color: #505050;
+  --calendar-current-date-color: #1b1f21;
+  --calendar-today-color: linear-gradient(to bottom, #03a9f4, #2196f3);
+}
+.calendar {
+  background-color: var(--calendar-bg-color);
+  color: var(--calendar-font-color);
+  border-radius: var(--calendar-border-radius);
+  max-width: 450px;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 5px 5px 10px var(--calendar-bg-color);
+}
+.calendar_inner {
+  padding: 2rem;
+  position: relative;
+}
+.calendar_headings {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+.fa-solid.fa-arrow-left,
+.fa-solid.fa-arrow-right {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+.current_datetime {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--calendar-current-date-color);
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+}
+.current_datetime .daytxt {
+  background-color: green;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  color: var(--calendar-font-color);
+}
+.days_date ul {
+  list-style-type: none;
+}
+.days_date .days,
+.dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+.days_date .days {
+  margin: 1rem 0;
+}
+.days_date .days li {
+  border-bottom: 2px solid var(--weekdays-border-bottom-color);
+  margin: 0 0.2rem;
+}
+.dates li {
+  padding: 0.5rem;
+  margin: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 5px;
+  color: var(--calendar-font-color);
+}
+.days_date .dates li:hover {
+  background-color: var(--calendar-date-hover-color);
+  color: var(--calendar-bg-color);
+}
+.days_date .dates li.active {
+  background: var(--calendar-today-color);
+}
+.days_date .dummy {
+  color: var(--calendar-dummy-color);
+}
+
+.calendar_date{
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+}
+
