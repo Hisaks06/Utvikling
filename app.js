@@ -27,7 +27,7 @@ app.use(express.static(staticPath));
 //Checks if password and familycode are correct, gives them data back
 app.post('/login', upload.none(), (req, res) => {
     try {
-        let user = checkUserPassword(req.body.familycode, req.body.username, req.body.password);
+        let user = checkUserPassword(req.body.username, req.body.password);
         if (user != null) {
             req.session.loggedIn = true;
             req.session.username = user.username;
@@ -45,75 +45,26 @@ app.post('/login', upload.none(), (req, res) => {
 
 app.post('/register', (req, res) => {
     const reguser = req.body;
-    const familyId = addFamily(reguser.lastname); // Create a new family entry with the user's last name
-    if (familyId) {
-        const user = addUser(reguser.username, reguser.firstname, reguser.lastname, reguser.epost, reguser.password, reguser.mobile, reguser.role, familyId);
-        if (user) {
-            req.session.loggedIn = true;
-            req.session.username = user.username;
-            req.session.userrole = user.role;
-            req.session.userid = user.userid;
-            res.send(true);
-        } else {
-            res.send(false);
-        }
+    const user = addUser(reguser.username, reguser.firstname, reguser.lastname, reguser.epost, reguser.password, reguser.mobile, reguser.age, reguser.role);
+    if (user) {
+        req.session.loggedIn = true;
+        req.session.username = user.username;
+        req.session.userrole = user.role;
+        req.session.userid = user.userid;
+        res.send(true);
     } else {
         res.send(false);
     }
 });
 
-function checkUserPassword(familyName, username, password) {
-    const sql = db.prepare(`
-        SELECT user.id AS userid, username, role.name AS role, password 
-        FROM user 
-        INNER JOIN role ON user.idrole = role.id 
-        INNER JOIN family ON user.idfamily = family.id 
-        WHERE username = ? AND family.name = ?
-    `);
-    let user = sql.get(username, familyName);
-    if (user && bcrypt.compareSync(password, user.password)) {
-        return user;
-    } else {
-        return null;
-    }
-}
-
-
-// Middleware to check if the user is logged in and has appropriate role
-function checkLoggedIn(req, res, next) {
-    if (!req.session.loggedIn || req.session.userrole === 'unknown') {
-        res.sendFile(path.join(__dirname, "public/login.html"));
-    } else {
-        next();
-    }
-}
-
-// Middleware to check if the user is allowed to create a new task
-function checkTaskCreationPermission(req, res, next) {
-    if (req.session.userrole === 'unknown') {
-        res.status(403).send("Forbidden: Unknown users cannot create tasks.");
-    } else {
-        next();
-    }
-}
-
-
-function addUser(username, firstname, lastname, email, password, mobile, idrole, idfamily) {
+function addUser(username, firstname, lastname, email, password, mobile, age, idrole) {
     const hash = bcrypt.hashSync(password, saltRounds);
     
     // First, insert the user into the user table
-    const sqlUser = db.prepare("INSERT INTO user (username, firstname, lastname, email, password, mobile, idrole, idfamily) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    const sqlUser = db.prepare("INSERT INTO user (username, firstname, lastname, email, password, mobile, age, idrole) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     try {
-        const info = sqlUser.run(username, firstname, lastname, email, hash, mobile, idrole, idfamily);
+        const info = sqlUser.run(username, firstname, lastname, email, hash, mobile, age, idrole);
         const insertedUserId = info.lastInsertRowid;
-        
-        // Retrieve the family id
-        const sqlGetFamilyId = db.prepare("SELECT id FROM family WHERE name = ?");
-        const familyId = sqlGetFamilyId.get(lastname).id;
-        
-        // Update the user's family id
-        const sqlUpdateFamilyId = db.prepare("UPDATE user SET idfamily = ? WHERE id = ?");
-        sqlUpdateFamilyId.run(familyId, insertedUserId);
         
         // Return the user data
         const user = getUserById(insertedUserId);
@@ -125,32 +76,36 @@ function addUser(username, firstname, lastname, email, password, mobile, idrole,
 }
 
 
-function addFamily(lastname) {
-    // Check if the family already exists in the table
-    const sqlCheckFamily = db.prepare("SELECT id FROM family WHERE name = ?");
-    let existingFamily = sqlCheckFamily.get(lastname);
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, "public/login.html"));
+});
 
-    if (existingFamily) {
-        let newLastName = lastname;
-        let suffix = 1;
-        
-        // Generate a unique family name
-        while (existingFamily) {
-            newLastName = `${lastname}_${suffix}`;
-            existingFamily = sqlCheckFamily.get(newLastName);
-            suffix++;
-        }
-        lastname = newLastName; // Update the family name to the unique one
-    }
 
-    // Insert the new family into the database
-    const sqlInsertFamily = db.prepare("INSERT INTO family (name) VALUES (?)");
-    try {
-        const info = sqlInsertFamily.run(lastname);
-        return info.lastInsertRowid; // Return the ID of the newly inserted family entry
-    } catch (error) {
-        console.error("Error adding family:", error);
+function checkUserPassword(username, password) {
+    const sql = db.prepare(`
+        SELECT user.id AS userid, username, role.name AS role, password 
+        FROM user 
+        INNER JOIN role ON user.idrole = role.id 
+        WHERE username = ?
+    `);
+    let user = sql.get(username);
+    if (user && bcrypt.compareSync(password, user.password)) {
+        return user;
+    } else {
         return null;
+    }
+}
+
+
+// Middleware to check if the user is logged in
+function checkLoggedIn(req, res, next) {
+    console.log(1)
+    if (!req.session.loggedIn) {
+        console.log(2)
+        res.sendFile(path.join(__dirname, "public/login.html")); // Send the login page
+        console.log(3)
+    } else {
+        next();
     }
 }
 
@@ -160,57 +115,28 @@ function getUserById(userId) {
     return user;
 }
 
-// Server-Side (Backend)
-/*app.post('/invite', checkLoggedIn, (req, res) => {
-    const { username, familyName } = req.body;
-
-    // Check if the family exists
-    const familyId = getFamilyIdByName(familyName);
-    if (!familyId) {
-        res.status(400).send("Family does not exist");
-        return;
-    }
-
-    // Update the user's family
-    const success = updateUserFamily(username, familyId);
-    if (success) {
-        res.status(200).send("User invited to family successfully");
+// Middleware function to check if the user is an admin
+function isAdmin(req, res, next) {
+    // Check if the user is logged in and has the admin role
+    if (req.session.loggedIn && req.session.userrole === 'admin') {
+        // User is admin, allow access to the next middleware or route handler
+        next();
     } else {
-        res.status(500).send("Failed to invite user to family");
-    }
-});
-
-// Function to update user's family in the database
-function updateUserFamily(username, familyId) {
-    // Retrieve the user id based on the username
-    const sqlGetUserId = db.prepare("SELECT id FROM user WHERE username = ?");
-    const user = sqlGetUserId.get(username);
-    if (!user) {
-        return false; // User not found
-    }
-
-    // Update the user's family id
-    const sqlUpdateFamilyId = db.prepare("UPDATE user SET idfamily = ? WHERE id = ?");
-    try {
-        sqlUpdateFamilyId.run(familyId, user.id);
-        return true; // Successfully updated the user's family
-    } catch (error) {
-        console.error("Error updating user's family:", error);
-        return false; // Failed to update the user's family
+        // User is not admin, deny access
+        res.status(403).send('Forbidden');
     }
 }
 
-// Function to get family id by name
-function getFamilyIdByName(familyName) {
-    const sql = db.prepare("SELECT id FROM family WHERE name = ?");
-    const family = sql.get(familyName);
-    return family ? family.id : null;
-}*/
+// Route for serving admin.html, protected by isAdmin middleware
+app.get('/admin', isAdmin, (req, res) => {
+    // Serve the admin.html page
+    res.sendFile(path.join(__dirname, 'public/admin.html'));
+});
 
 app.get('/currentUser', checkLoggedIn,  (req, res) => {
-    const sql = db.prepare('SELECT user.id AS userid, username, role.name AS role, firstname, lastname FROM user INNER JOIN role ON user.idrole = role.id WHERE user.id = ?');
+    const sql = db.prepare('SELECT user.id AS userid, username, role.name AS role, firstname, lastname, email, mobile, age FROM user INNER JOIN role ON user.idrole = role.id WHERE user.id = ?');
     const user = sql.get(req.session.userid);
-    res.send([user.userid, user.username, user.role, user.firstname, user.lastname]);
+    res.send([user.userid, user.username, user.role, user.firstname, user.lastname, user.epost, user.mobile, user.age]);
 });
 
 app.get('/', checkLoggedIn, (req, res) => {
@@ -233,6 +159,18 @@ app.get('/roles', (req, res) => {
         res.json(role);
     } catch (error) {
         console.error('Error fetching roles from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.get('/category', (req, res) => {
+    try {
+        // Query the database to fetch role names
+        const sql = db.prepare('SELECT * FROM category');
+        const category = sql.all();
+        res.json(category);
+    } catch (error) {
+        console.error('Error fetching category from database:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });

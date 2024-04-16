@@ -23,7 +23,7 @@
         <ol>
             <li class="nav"><a href="index.html" class="tab"><i class="fas fa-home"></i>Hjem</a></li>
             <li class="nav"><a href="profile.html" class="tab"><i class="fas fa-user"></i>Profil</a></li>
-            <li class="nav"><a href="admin.html" class="tab"><i class="fas fa-user-cog"></i>Admin</a></li>
+            <li class="nav" id="adminTab"><a href="admin.html" class="tab"><i class="fas fa-user-cog"></i>Admin</a></li>
             <li class="nav"><a href="projects.html" class="tab"><i class="fas fa-project-diagram"></i>Prosjekt</a></li>
             <li class="nav"><a href="login.html" class="tab"><i class="fas fa-door-open"></i>Logg Ut</a></li>
         </ol>
@@ -37,10 +37,10 @@
         <section class="user-info">
             <form>
             <h2>Bruker Informasjon</h2>
-            <p><strong>Brukernavn:</strong> <span id="username"></span></p>
-            <p><strong>Fornavn:</strong> <span id="firstName"></span></p>
-            <p><strong>Etternavn:</strong> <span id="lastName"></span></p>
-            <p><strong>Rolle:</strong> <span id="role"></span></p>
+            <p><strong>Brukernavn:</strong> <div id="username"></div></p>
+            <p><strong>Fornavn:</strong> <div id="firstName"></div></p>
+            <p><strong>Etternavn:</strong> <div id="lastName"></div></p>
+            <p><strong>Rolle:</strong> <div id="role"></div></p>
             <button>Rediger</button>
             <button>Slett Bruker</button>
             </form>
@@ -92,6 +92,8 @@
     <footer>
     </footer>
 
+    <script src="js/admin.js"></script>
     <script src="js/web.js"></script>
+    <script src="js/project.js"></script>
 </body>
 </html>

@@ -344,6 +344,13 @@ input{
   visibility: hidden;
   display: none;
 }
+
+.userdata {
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+}
+
 span{
   position:absolute;
   right: -40px;
@@ -567,3 +574,18 @@ span{
   align-items: center; /* Vertically center */
 }
 
+/* Add more specific styling for input fields within the form */
+form input[type="text"],
+form input[type="password"],
+form input[type="mail"],
+form input[type="number"],
+form textarea {
+    visibility: visible; /* Ensure input fields are visible */
+    display: inline-block; /* Ensure input fields are displayed */
+}
+
+/* Override any other styles that might affect input fields within the form */
+form input,
+form textarea {
+    /* Add your custom styles here */
+}
