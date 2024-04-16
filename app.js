@@ -45,7 +45,7 @@ app.post('/login', upload.none(), (req, res) => {
 
 app.post('/register', (req, res) => {
     const reguser = req.body;
-    const user = addUser(reguser.username, reguser.firstname, reguser.lastname, reguser.epost, reguser.password, reguser.mobile, reguser.age, reguser.role);
+    const user = addUser(reguser.username, reguser.firstname, reguser.lastname, reguser.email, reguser.password, reguser.mobile, reguser.age, reguser.role);
     if (user) {
         req.session.loggedIn = true;
         req.session.username = user.username;
@@ -80,6 +80,44 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, "public/login.html"));
 });
 
+// Handle POST request to edit user profile
+app.post('/editProfile', (req, res) => {
+    // Extract edited data from the request body
+    const { editedUsername, editedFirstName, editedLastName, editedEmail, editedMobile, editedAge, editedPassword } = req.body;
+
+    // Hash the edited password before updating the database
+    console.log("Edited Password:", editedPassword);
+    const hashedPassword = bcrypt.hashSync(editedPassword, saltRounds);
+
+
+    // Update the user profile in the database
+    const updateQuery = `
+        UPDATE user 
+        SET username = ?, 
+            firstname = ?, 
+            lastname = ?, 
+            email = ?, 
+            mobile = ?, 
+            age = ?, 
+            password = ?
+        WHERE id = ?`;
+
+    try {
+        const stmt = db.prepare(updateQuery);
+        stmt.run(editedUsername, editedFirstName, editedLastName, editedEmail, editedMobile, editedAge, hashedPassword, req.session.userid, (err) => {
+            if (err) {
+                console.error('Error updating user profile:', err);
+                res.status(500).json({ success: false, error: 'Internal Server Error' });
+            } else {
+                // Send a success response
+                res.json({ success: true });
+            }
+        });
+    } catch (error) {
+        console.error('Error updating user profile:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
 
 function checkUserPassword(username, password) {
     const sql = db.prepare(`
@@ -115,28 +153,26 @@ function getUserById(userId) {
     return user;
 }
 
-// Middleware function to check if the user is an admin
-function isAdmin(req, res, next) {
-    // Check if the user is logged in and has the admin role
+// Middleware to check if the user is authenticated and has the admin role
+function checkAdmin(req, res, next) {
     if (req.session.loggedIn && req.session.userrole === 'admin') {
-        // User is admin, allow access to the next middleware or route handler
+        // User is authenticated and has admin role, allow access
         next();
     } else {
-        // User is not admin, deny access
-        res.status(403).send('Forbidden');
+        // User is not authorized, redirect to login page or display an error
+        res.redirect('/login'); // Assuming you have a login route
     }
 }
 
-// Route for serving admin.html, protected by isAdmin middleware
-app.get('/admin', isAdmin, (req, res) => {
-    // Serve the admin.html page
+// Route to serve admin.html, protected by checkAdmin middleware
+app.get('/admin', checkAdmin, (req, res) => {
     res.sendFile(path.join(__dirname, 'public/admin.html'));
 });
 
 app.get('/currentUser', checkLoggedIn,  (req, res) => {
     const sql = db.prepare('SELECT user.id AS userid, username, role.name AS role, firstname, lastname, email, mobile, age FROM user INNER JOIN role ON user.idrole = role.id WHERE user.id = ?');
     const user = sql.get(req.session.userid);
-    res.send([user.userid, user.username, user.role, user.firstname, user.lastname, user.epost, user.mobile, user.age]);
+    res.send([user.userid, user.username, user.role, user.firstname, user.lastname, user.email, user.mobile, user.age]);
 });
 
 app.get('/', checkLoggedIn, (req, res) => {

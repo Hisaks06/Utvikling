@@ -41,8 +41,34 @@
             <p><strong>Fornavn:</strong> <div id="firstName"></div></p>
             <p><strong>Etternavn:</strong> <div id="lastName"></div></p>
             <p><strong>Rolle:</strong> <div id="role"></div></p>
-            <button>Rediger</button>
+            <button id="editButton">Rediger</button>
             <button>Slett Bruker</button>
+            </form>
+            <br>
+            <form id="editForm" style="display: none;">
+                <h2>Rediger Brukerinformasjon</h2>
+                <label for="editUsername">Brukernavn:</label>
+                <input type="text" id="editUsername" name="editUsername"><br>
+            
+                <label for="editFirstName">Fornavn:</label>
+                <input type="text" id="editFirstName" name="editFirstName"><br>
+            
+                <label for="editLastName">Etternavn:</label>
+                <input type="text" id="editLastName" name="editLastName"><br>
+            
+                <label for="editEmail">E-post:</label>
+                <input type="text" id="editEmail" name="editEmail"><br>
+            
+                <label for="editMobile">Mobil:</label>
+                <input type="text" id="editMobile" name="editMobile"><br>
+            
+                <label for="editAge">Alder:</label>
+                <input type="number" id="editAge" name="editAge"><br>
+            
+                <label for="editPassword">Passord:</label>
+                <input type="password" id="editPassword" name="editPassword"><br>
+            
+                <button type="button" id="saveChanges">Lagre Endringer</button>
             </form>
 
             <br>
@@ -92,7 +118,7 @@
     <footer>
     </footer>
 
-    <script src="js/admin.js"></script>
+    <script src="js/user.js"></script>
     <script src="js/web.js"></script>
     <script src="js/project.js"></script>
 </body>
