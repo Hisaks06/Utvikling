@@ -47,7 +47,7 @@ async function main() {
 
 document.addEventListener('DOMContentLoaded', main);
 
-/*async function fetchUsers() {
+async function fetchUsers() {
     try {
         const response = await fetch('/users');
         const usersJ = await response.json();
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', main);
     } catch (error) {
         console.log('Failed to fetch user:', error);
     }
-}*/
+}
 
 // Retrives the data from the current user
 async function fetchCurrentUser() {
@@ -85,14 +85,14 @@ async function fetchCurrentUser() {
 async function fetchData() {
     try {
         await fetchCurrentUser();
-        /*await fetchUsers();*/
+        await fetchUsers();
     } catch (error) {
         console.log('Failed to fetch data:', error);
     }
 }
 
 // a list of users registered on the website
-/*function populateFamilyMembers(users) {
+function populateFamilyMembers(users) {
     usersSelect.innerHTML = "";
     users.forEach(user => {
         const option = document.createElement("option");
@@ -100,4 +100,4 @@ async function fetchData() {
         option.textContent = user.username;
         usersSelect.appendChild(option);
     });
-}*/
+}

@@ -196,6 +196,24 @@ margin-bottom: 0;
   align-items: center;
 }
 
+#loginFeedback{
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+}
+
+#center{
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+}
+
+.center{
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+}
+
 :root {
   --background-color-light: #f2f2f2; /* Light mode background color */
   --text-color-light: #333; /* Light mode text color */

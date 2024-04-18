@@ -29,9 +29,44 @@
     </div>
     <br>
     <h1>Admin</h1>
-    <form>
-        
-    </form>
-    <script src="js/user.js"></script>
+    <article>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Age</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody id="adminDataBody"></tbody>
+        </table>
+    </article>
+    <script>
+        // Fetch data from the server and display it in the table
+        fetch('/admin/data')
+            .then(response => response.json())
+            .then(data => {
+                const adminDataBody = document.getElementById('adminDataBody');
+                data.forEach(item => {
+                    const row = `
+                        <tr>
+                            <td>${item.username}</td>
+                            <td>${item.firstname}</td>
+                            <td>${item.lastname}</td>
+                            <td>${item.email}</td>
+                            <td>${item.mobile}</td>
+                            <td>${item.age}</td>
+                            <td>${item.role}</td>
+                        </tr>
+                    `;
+                    adminDataBody.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Error fetching admin data:', error));
+    </script>
 </body>
 </html>

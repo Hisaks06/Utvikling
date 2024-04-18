@@ -177,6 +177,23 @@ app.get('/editProfile', checkLoggedIn, (req, res) => {
     }
 });
 
+// Define a route to fetch all data for the admin page
+app.get('/admin/data', (req, res) => {
+    try {
+        // Query the database to fetch all data
+        const sql = db.prepare(`
+            SELECT user.username, user.firstname, user.lastname, user.email, user.password, user.mobile, user.age, role.name AS role
+            FROM user
+            INNER JOIN role ON user.idRole = role.id
+        `);
+        const data = sql.all();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 // Route to serve admin.html, protected by checkAdmin middleware
 app.get('/admin', checkAdmin, (req, res) => {
     res.sendFile(path.join(__dirname, 'public/admin.html'));
