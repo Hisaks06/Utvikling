@@ -163,6 +163,169 @@ function checkAdmin(req, res, next) {
     }
 }
 
+// Update a project record
+app.put('/projects/:id', (req, res) => {
+    const projectId = req.params.id;
+    const { name, description, category, status, completedBy } = req.body;
+
+    try {
+        const updateQuery = `
+            UPDATE project 
+            SET name = ?, 
+                description = ?, 
+                category = ?, 
+                status = ?, 
+                completedBy = ?
+            WHERE id = ?`;
+
+        const stmt = db.prepare(updateQuery);
+        stmt.run(name, description, category, status, completedBy, projectId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error updating project:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Delete a project record
+app.delete('/projects/:id', (req, res) => {
+    const projectId = req.params.id;
+
+    try {
+        const deleteQuery = `
+            DELETE FROM project
+            WHERE id = ?`;
+
+        const stmt = db.prepare(deleteQuery);
+        stmt.run(projectId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error deleting project:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Update a users record
+app.put('/users/:id', (req, res) => {
+    const usersId = req.params.id;
+    const { username, firstname, lastname, email, password, mobile, age, idrole } = req.body;
+
+    try {
+        const updateQuery = `
+            UPDATE user 
+            SET username = ?, 
+                firstname = ?, 
+                lastname = ?, 
+                email = ?, 
+                password = ?,
+                mobile = ?, 
+                age = ?, 
+                idrole = ?
+            WHERE id = ?`;
+
+        const stmt = db.prepare(updateQuery);
+        stmt.run(username, firstname, lastname, email, password, mobile, age, idrole, usersId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Delete a users record
+app.delete('/users/:id', (req, res) => {
+    const usersId = req.params.id;
+
+    try {
+        const deleteQuery = `
+            DELETE FROM user
+            WHERE id = ?`;
+
+        const stmt = db.prepare(deleteQuery);
+        stmt.run(usersId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Update a role record
+app.put('/role/:id', (req, res) => {
+    const roleId = req.params.id;
+    const { name } = req.body;
+
+    try {
+        const updateQuery = `
+            UPDATE role 
+            SET name = ?
+            WHERE id = ?`;
+
+        const stmt = db.prepare(updateQuery);
+        stmt.run(name, roleId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error updating role:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Delete a role record
+app.delete('/role/:id', (req, res) => {
+    const roleId = req.params.id;
+
+    try {
+        const deleteQuery = `
+            DELETE FROM role
+            WHERE id = ?`;
+
+        const stmt = db.prepare(deleteQuery);
+        stmt.run(roleId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error deleting role:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Update a category record
+app.put('/category/:id', (req, res) => {
+    const categoryId = req.params.id;
+    const { name } = req.body;
+
+    try {
+        const updateQuery = `
+            UPDATE category 
+            SET name = ?
+            WHERE id = ?`;
+
+        const stmt = db.prepare(updateQuery);
+        stmt.run(name, categoryId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error updating category:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Delete a category record
+app.delete('/category/:id', (req, res) => {
+    const categoryId = req.params.id;
+
+    try {
+        const deleteQuery = `
+            DELETE FROM category
+            WHERE id = ?`;
+
+        const stmt = db.prepare(deleteQuery);
+        stmt.run(categoryId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error deleting category:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
 app.get('/editProfile', checkLoggedIn, (req, res) => {
     // Assuming you have a function to fetch the user's current profile data
     const userId = req.session.userid;
@@ -190,6 +353,54 @@ app.get('/admin/data', (req, res) => {
         res.json(data);
     } catch (error) {
         console.error('Error fetching data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Define a route to fetch all data for the project table
+app.get('/projects/data', (req, res) => {
+    try {
+        // Query the database to fetch all project data
+        const sql = db.prepare(`
+            SELECT * 
+            FROM project
+        `);
+        const data = sql.all();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching project data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Define a route to fetch data for the role table
+app.get('/roles/data', (req, res) => {
+    try {
+        // Query the database to fetch all role data
+        const sql = db.prepare(`
+            SELECT * 
+            FROM role
+        `);
+        const data = sql.all();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching role data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Define a route to fetch data for the category table
+app.get('/categories/data', (req, res) => {
+    try {
+        // Query the database to fetch all category data
+        const sql = db.prepare(`
+            SELECT * 
+            FROM category
+        `);
+        const data = sql.all();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching category data from database:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
@@ -237,6 +448,18 @@ app.get('/category', (req, res) => {
         res.json(category);
     } catch (error) {
         console.error('Error fetching category from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.get('/project', (req, res) => {
+    try {
+        // Query the database to fetch role names
+        const sql = db.prepare('SELECT * FROM project');
+        const project = sql.all();
+        res.json(project);
+    } catch (error) {
+        console.error('Error fetching project from database:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });

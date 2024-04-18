@@ -40,33 +40,55 @@
                     <th>Mobile</th>
                     <th>Age</th>
                     <th>Role</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="adminDataBody"></tbody>
         </table>
     </article>
-    <script>
-        // Fetch data from the server and display it in the table
-        fetch('/admin/data')
-            .then(response => response.json())
-            .then(data => {
-                const adminDataBody = document.getElementById('adminDataBody');
-                data.forEach(item => {
-                    const row = `
-                        <tr>
-                            <td>${item.username}</td>
-                            <td>${item.firstname}</td>
-                            <td>${item.lastname}</td>
-                            <td>${item.email}</td>
-                            <td>${item.mobile}</td>
-                            <td>${item.age}</td>
-                            <td>${item.role}</td>
-                        </tr>
-                    `;
-                    adminDataBody.innerHTML += row;
-                });
-            })
-            .catch(error => console.error('Error fetching admin data:', error));
-    </script>
+    <article>
+        <h2>Project Table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Category ID</th>
+                    <th>Status</th>
+                    <th>Completed By</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="projectDataBody"></tbody>
+        </table>
+    </article>
+    <article>
+        <h2>Project Role</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="roleDataBody"></tbody>
+        </table>
+    </article>
+    <article>
+        <h2>Project Category</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="categoryDataBody"></tbody>
+        </table>
+    </article>
+    <script src="js/admin.js"></script>
 </body>
 </html>
