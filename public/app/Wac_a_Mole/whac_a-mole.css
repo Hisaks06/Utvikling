@@ -1,0 +1,51 @@
+html {
+  box-sizing: border-box;
+  font-size: 10px;
+  background: #00c8ff;
+}
+
+h1 {
+    text-align: center;
+    font-size: 225px;
+    line-height:1;
+    margin-bottom: 0;
+    object-position: center;
+  }
+
+  .controls {
+    margin: 50px 5px;
+    text-align: center;
+  }
+
+  .button {
+    background-color: yellow;
+    border: none;
+    color: black;
+    padding: 30px 64px;
+    text-align: center;
+    object-position: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+
+  #moles {
+    object-position: 500px 750px;
+    object-position: bottom right;
+  }
+
+  #secound {
+    visibility: hidden;
+    object-position: 500px 750px;
+    object-position: center;
+  }
+
+  #third {
+    object-position: 500px 750px;
+    object-position: bottom left;
+  }
+  
+  img{
+    max-width: 100%;
+    height: auto;
+  }

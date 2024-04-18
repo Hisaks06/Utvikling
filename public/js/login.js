@@ -30,7 +30,7 @@ async function login(evt) {
             // Adjust this according to your actual response structure
             if (user){ 
                 console.log(user);
-                window.location.href = '/index.html'; 
+                window.location.href = '/app.html'; 
                 // Possibly redirect the user or update UI to show a successful login
             } else {
                 // Handle case where user data is not in the expected format

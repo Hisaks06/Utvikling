@@ -86,9 +86,7 @@ app.post('/editProfile', (req, res) => {
     const { editedUsername, editedFirstName, editedLastName, editedEmail, editedMobile, editedAge, editedPassword } = req.body;
 
     // Hash the edited password before updating the database
-    console.log("Edited Password:", editedPassword);
     const hashedPassword = bcrypt.hashSync(editedPassword, saltRounds);
-
 
     // Update the user profile in the database
     const updateQuery = `
@@ -118,6 +116,7 @@ app.post('/editProfile', (req, res) => {
         res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 });
+
 
 function checkUserPassword(username, password) {
     const sql = db.prepare(`
@@ -164,6 +163,20 @@ function checkAdmin(req, res, next) {
     }
 }
 
+app.get('/editProfile', checkLoggedIn, (req, res) => {
+    // Assuming you have a function to fetch the user's current profile data
+    const userId = req.session.userid;
+    const userProfile = getUserProfile(userId);
+
+    if (userProfile) {
+        // If the user profile data is retrieved successfully, render the edit profile form
+        res.render('editProfile', { userProfile });
+    } else {
+        // If the user profile data cannot be retrieved, send an error response
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 // Route to serve admin.html, protected by checkAdmin middleware
 app.get('/admin', checkAdmin, (req, res) => {
     res.sendFile(path.join(__dirname, 'public/admin.html'));
@@ -176,7 +189,7 @@ app.get('/currentUser', checkLoggedIn,  (req, res) => {
 });
 
 app.get('/', checkLoggedIn, (req, res) => {
-    res.sendFile(path.join(__dirname, "public/index.html"));
+    res.sendFile(path.join(__dirname, "public/app.html"));
 });
 
 app.get('/users', checkLoggedIn,  (req, res) => {
