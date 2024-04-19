@@ -19,6 +19,7 @@ margin-top: 50px;
 }
 
 form {
+display: block;
 width: 300px;
 margin: 0 auto;
 background-color: #fff;
@@ -59,6 +60,45 @@ padding: 10px;
 border: 1px solid #ccc;
 border-radius: 5px;
 margin-bottom: 20px;
+}
+
+#addUserForm{
+  display: none;
+  width: 300px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+#addProjectForm{
+  display: none;
+  width: 300px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+#addRoleForm{
+  display: none;
+  width: 300px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+#addCategoryForm{
+  display: none;
+  width: 300px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
 button[type="submit"] {

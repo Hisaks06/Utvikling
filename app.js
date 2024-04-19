@@ -146,12 +146,6 @@ function checkLoggedIn(req, res, next) {
     }
 }
 
-function getUserById(userId) {
-    const sql = db.prepare('SELECT user.id as userid, username, role.name as role FROM user INNER JOIN role ON user.idrole = role.id WHERE user.id = ?');
-    const user = sql.get(userId);
-    return user;
-}
-
 // Middleware to check if the user is authenticated and has the admin role
 function checkAdmin(req, res, next) {
     if (req.session.loggedIn && req.session.userrole === 'admin') {
@@ -161,6 +155,12 @@ function checkAdmin(req, res, next) {
         // User is not authorized, redirect to login page or display an error
         res.redirect('/login'); // Assuming you have a login route
     }
+}
+
+function getUserById(userId) {
+    const sql = db.prepare('SELECT user.id as userid, username, role.name as role FROM user INNER JOIN role ON user.idrole = role.id WHERE user.id = ?');
+    const user = sql.get(userId);
+    return user;
 }
 
 // Update a project record

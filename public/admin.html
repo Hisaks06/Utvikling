@@ -45,6 +45,34 @@
             </thead>
             <tbody id="adminDataBody"></tbody>
         </table>
+        <button id="addUserBtn">Add User</button>
+
+        <!-- Add User Modal -->
+        <div id="addUserModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form id="addUserForm">
+                    <h2>Add User:</h2>
+                    <br>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required><br>
+                    <label for="firstname">First Name:</label>
+                    <input type="text" id="firstname" name="firstname" required><br>
+                    <label for="lastname">Last Name:</label>
+                    <input type="text" id="lastname" name="lastname" required><br>
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email" required><br>
+                    <label for="mobile">Mobile:</label>
+                    <input type="text" id="mobile" name="mobile"><br>
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age"><br>
+                    <label for="role">Rolle:</label>
+                    <select name="role" id="roleSelect">
+                    </select><br>
+                    <button type="submit">Add User</button>
+                </form>
+            </div>
+        </div>
     </article>
     <article>
         <h2>Project Table</h2>
@@ -62,6 +90,29 @@
             </thead>
             <tbody id="projectDataBody"></tbody>
         </table>
+        <button id="addProjectBtn">Add Project</button>
+
+        <!-- Add Project Modal -->
+        <div id="addProjectModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form id="addProjectForm">
+                    <h2>Add Project</h2>
+                    <br>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required><br>
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" name="description" required><br>
+                    <label for="category">Category:</label>
+                    <input type="text" id="category" name="category" required><br>
+                    <label for="status">Status:</label>
+                    <input type="text" id="status" name="status" required><br>
+                    <label for="completedBy">Completed By:</label>
+                    <input type="text" id="completedBy" name="completedBy"><br>
+                    <button type="submit">Add Project</button>
+                </form>
+            </div>
+        </div>
     </article>
     <article>
         <h2>Project Role</h2>
@@ -75,6 +126,21 @@
             </thead>
             <tbody id="roleDataBody"></tbody>
         </table>
+        <button id="addRoleBtn">Add Role</button>
+
+        <!-- Add Role Modal -->
+        <div id="addRoleModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form id="addRoleForm">
+                    <h2>Add Role</h2>
+                    <br>
+                    <label for="rolename">Name:</label>
+                    <input type="text" id="rolename" name="rolename" required><br>
+                    <button type="submit">Add Role</button>
+                </form>
+            </div>
+        </div>
     </article>
     <article>
         <h2>Project Category</h2>
@@ -88,6 +154,21 @@
             </thead>
             <tbody id="categoryDataBody"></tbody>
         </table>
+        <button id="addCategoryBtn">Add Category</button>
+
+        <!-- Add Category Modal -->
+        <div id="addCategoryModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form id="addCategoryForm">
+                    <h2>Add Category</h2>
+                    <br>
+                    <label for="categoryname">Name:</label>
+                    <input type="text" id="categoryname" name="categoryname" required><br>
+                    <button type="submit">Add Category</button>
+                </form>
+            </div>
+        </div>
     </article>
     <script src="js/admin.js"></script>
 </body>

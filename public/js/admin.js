@@ -1,4 +1,186 @@
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Add event listeners for showing modals
+    document.getElementById('addUserBtn').addEventListener('click', () => {
+        showAddUserModal();
+    });
+
+    document.getElementById('addProjectBtn').addEventListener('click', () => {
+        showAddProjectModal();
+    });
+
+    document.getElementById('addRoleBtn').addEventListener('click', () => {
+        showAddRoleModal();
+    });
+
+    document.getElementById('addCategoryBtn').addEventListener('click', () => {
+        showAddCategoryModal();
+    });
+
+    let IsHideUser = true;
+    document.getElementById('addUserBtn').addEventListener("click", () => {
+        if(IsHideUser){
+            document.getElementById('addUserForm').style.display = "block";
+            IsHideUser = false;
+        } else if(!IsHideUser){
+            document.getElementById('addUserForm').style.display = "none";
+            IsHideUser = true;
+        }
+    })    
+    
+    let IsHideProject = true;
+    document.getElementById('addProjectBtn').addEventListener("click", () => {
+        if(IsHideProject){
+            document.getElementById('addProjectForm').style.display = "block";
+            IsHideProject = false;
+        } else if(!IsHideProject){
+            document.getElementById('addProjectForm').style.display = "none";
+            IsHideProject = true;
+        }
+    }) 
+
+    let IsHideRole = true;
+    document.getElementById('addRoleBtn').addEventListener("click", () => {
+        if(IsHideRole){
+            document.getElementById('addRoleForm').style.display = "block";
+            IsHideRole = false;
+        } else if(!IsHideRole){
+            document.getElementById('addRoleForm').style.display = "none";
+            IsHideRole = true;
+        }
+    }) 
+
+    let IsHideCategory = true;
+    document.getElementById('addCategoryBtn').addEventListener("click", () => {
+        if(IsHideCategory){
+            document.getElementById('addCategoryForm').style.display = "block";
+            IsHideCategory = false;
+        } else if(!IsHideCategory){
+            document.getElementById('addCategoryForm').style.display = "none";
+            IsHideCategory = true;
+        }
+    }) 
+    // Add event listeners for closing modals
+    const closeButtons = document.querySelectorAll('.close');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.parentElement.parentElement;
+            hideModal(modal);
+        });
+    });
+
+    // Close the modal when clicking outside of it
+    window.addEventListener('click', event => {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                hideModal(modal);
+            }
+        });
+    });
+
+    // Fetch role names from the server and populate the dropdown
+    fetchRoles();
+});
+// Function to show add user modal
+function showAddUserModal() {
+    const modal = document.getElementById('addUserModal');
+    modal.style.display = 'block';
+}
+
+// Function to show add project modal
+function showAddProjectModal() {
+    const modal = document.getElementById('addProjectModal');
+    modal.style.display = 'block';
+}
+
+// Function to show add role modal
+function showAddRoleModal() {
+    const modal = document.getElementById('addRoleModal');
+    modal.style.display = 'block';
+}
+
+// Function to show add category modal
+function showAddCategoryModal() {
+    const modal = document.getElementById('addCategoryModal');
+    modal.style.display = 'block';
+}
+
+// Function to hide modal
+function hideModal(modal) {
+    modal.style.display = 'none';
+}
+
+// Fetch role names from the server and populate the dropdown
+async function fetchRoles() {
+    try {
+        const response = await fetch('/roles');
+        const roles = await response.json();
+        const roleSelect = document.getElementById('roleSelect');
+        roles.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role.id;
+            option.textContent = role.name;
+            roleSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Failed to fetch roles:', error);
+    }
+}
+
+// Function to handle form submission for adding a user
+document.getElementById('addUserForm').addEventListener('submit', event => {
+    event.preventDefault();
+    addUser(event);
+});
+
+// Function to handle form submission for adding a project
+document.getElementById('addProjectForm').addEventListener('submit', event => {
+    event.preventDefault();
+    addProject(event);
+});
+
+// Function to handle form submission for adding a role
+document.getElementById('addRoleForm').addEventListener('submit', event => {
+    event.preventDefault();
+    addRole(event);
+});
+
+// Function to handle form submission for adding a category
+document.getElementById('addCategoryForm').addEventListener('submit', event => {
+    event.preventDefault();
+    addCategory(event);
+});
+
+// Function to show add user modal
+function showAddUserModal() {
+    const modal = document.getElementById('addUserModal');
+    modal.style.display = 'block';
+}
+
+// Function to show add project modal
+function showAddProjectModal() {
+    const modal = document.getElementById('addProjectModal');
+    modal.style.display = 'block';
+}
+
+// Function to show add role modal
+function showAddRoleModal() {
+    const modal = document.getElementById('addRoleModal');
+    modal.style.display = 'block';
+}
+
+// Function to show add category modal
+function showAddCategoryModal() {
+    const modal = document.getElementById('addCategoryModal');
+    modal.style.display = 'block';
+}
+
+// Function to hide modal
+function hideModal(modal) {
+    modal.style.display = 'none';
+}
+
 // Fetch data from the server and display it in the table
 fetch('/admin/data')
     .then(response => response.json())
@@ -132,6 +314,30 @@ if (response.ok) {
 .catch(error => console.error('Error deleting user:', error));
 }
 
+// Function to handle form submission for adding a user
+function addUser(event) {
+    event.preventDefault();
+
+    // Get form data
+    const formData = new FormData(document.getElementById('addUserForm'));
+
+    // Send POST request to server with form data
+    fetch('/admin/user', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Close the modal
+        document.getElementById('addUserModal').style.display = 'none';
+
+        // Add new row to the table with added user data
+        const newRow = createTableRow(data);
+        document.getElementById('adminDataBody').appendChild(newRow);
+    })
+    .catch(error => console.error('Error adding user:', error));
+}
+
 // Function to handle edit project
 function editProject(projectId) {
 // Assume there's a form for editing projects with input fields for name, description, category, status, and completedBy
@@ -170,6 +376,30 @@ if (response.ok) {
 .catch(error => console.error('Error deleting project:', error));
 }
 
+// Function to handle form submission for adding a project
+function addProject(event) {
+    event.preventDefault();
+
+    // Get form data
+    const formData = new FormData(document.getElementById('addProjectForm'));
+
+    // Send POST request to server with form data
+    fetch('/admin/project', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Close the modal
+        document.getElementById('projectDataBody').style.display = 'none';
+
+        // Add new row to the table with added project data
+        const newRow = createTableRow(data);
+        document.getElementById('projectDataBody').appendChild(newRow);
+    })
+    .catch(error => console.error('Error adding project:', error));
+}
+
 // Function to handle edit role
 function editRole(roleId) {
 // Assume there's a form for editing roles with an input field for name
@@ -202,6 +432,30 @@ if (response.ok) {
 }
 })
 .catch(error => console.error('Error deleting role:', error));
+}
+
+// Function to handle form submission for adding a role
+function addRole(event) {
+    event.preventDefault();
+
+    // Get form data
+    const formData = new FormData(document.getElementById('addRoleForm'));
+
+    // Send POST request to server with form data
+    fetch('/admin/role', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Close the modal
+        document.getElementById('roleDataBody').style.display = 'none';
+
+        // Add new row to the table with added role data
+        const newRow = createTableRow(data);
+        document.getElementById('roleDataBody').appendChild(newRow);
+    })
+    .catch(error => console.error('Error adding role:', error));
 }
 
 // Function to handle edit category
@@ -237,3 +491,47 @@ function deleteCategory(categoryId) {
     })
     .catch(error => console.error('Error deleting category:', error));
 }
+
+// Function to handle form submission for adding a category
+function addCategory(event) {
+    event.preventDefault();
+
+    // Get form data
+    const formData = new FormData(document.getElementById('addCategoryForm'));
+
+    // Send POST request to server with form data
+    fetch('/admin/category', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Close the modal
+        document.getElementById('categoryDataBody').style.display = 'none';
+
+        // Add new row to the table with added category data
+        const newRow = createTableRow(data);
+        document.getElementById('categoryDataBody').appendChild(newRow);
+    })
+    .catch(error => console.error('Error adding category:', error));
+}
+
+// Fetch role names from the server and populate the dropdown
+async function fetchRoles() {
+    try {
+        const response = await fetch('/roles');
+        const roles = await response.json();
+        const roleSelect = document.getElementById('roleSelect');
+        roles.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role.id; // Assuming role.id is the unique identifier for each role
+            option.textContent = role.name; // Assuming role.name is the name of the role
+            roleSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Failed to fetch roles:', error);
+    }
+}
+
+// Call the fetchRoles function when the page loads
+document.addEventListener('DOMContentLoaded', fetchRoles);  
