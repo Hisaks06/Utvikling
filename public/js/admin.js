@@ -1,21 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // Add event listeners for showing modals
-    document.getElementById('addUserBtn').addEventListener('click', () => {
-        showAddUserModal();
-    });
-
-    document.getElementById('addProjectBtn').addEventListener('click', () => {
-        showAddProjectModal();
-    });
-
-    document.getElementById('addRoleBtn').addEventListener('click', () => {
-        showAddRoleModal();
-    });
-
-    document.getElementById('addCategoryBtn').addEventListener('click', () => {
-        showAddCategoryModal();
-    });
 
     let IsHideUser = true;
     document.getElementById('addUserBtn').addEventListener("click", () => {
@@ -59,57 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('addCategoryForm').style.display = "none";
             IsHideCategory = true;
         }
-    }) 
-    // Add event listeners for closing modals
-    const closeButtons = document.querySelectorAll('.close');
-    closeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const modal = button.parentElement.parentElement;
-            hideModal(modal);
-        });
-    });
-
-    // Close the modal when clicking outside of it
-    window.addEventListener('click', event => {
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach(modal => {
-            if (event.target === modal) {
-                hideModal(modal);
-            }
-        });
-    });
+    })
 
     // Fetch role names from the server and populate the dropdown
     fetchRoles();
 });
-// Function to show add user modal
-function showAddUserModal() {
-    const modal = document.getElementById('addUserModal');
-    modal.style.display = 'block';
-}
-
-// Function to show add project modal
-function showAddProjectModal() {
-    const modal = document.getElementById('addProjectModal');
-    modal.style.display = 'block';
-}
-
-// Function to show add role modal
-function showAddRoleModal() {
-    const modal = document.getElementById('addRoleModal');
-    modal.style.display = 'block';
-}
-
-// Function to show add category modal
-function showAddCategoryModal() {
-    const modal = document.getElementById('addCategoryModal');
-    modal.style.display = 'block';
-}
-
-// Function to hide modal
-function hideModal(modal) {
-    modal.style.display = 'none';
-}
 
 // Fetch role names from the server and populate the dropdown
 async function fetchRoles() {
@@ -326,7 +265,12 @@ function addUser(event) {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to add user');
+        }
+        return response.json();
+    })
     .then(data => {
         // Close the modal
         document.getElementById('addUserModal').style.display = 'none';
@@ -335,7 +279,11 @@ function addUser(event) {
         const newRow = createTableRow(data);
         document.getElementById('adminDataBody').appendChild(newRow);
     })
-    .catch(error => console.error('Error adding user:', error));
+    .catch(error => {
+        console.error('Error adding user:', error);
+        // Display error message to the user
+        alert('Failed to add user. Please try again.');
+    });
 }
 
 // Function to handle edit project
@@ -515,23 +463,3 @@ function addCategory(event) {
     })
     .catch(error => console.error('Error adding category:', error));
 }
-
-// Fetch role names from the server and populate the dropdown
-async function fetchRoles() {
-    try {
-        const response = await fetch('/roles');
-        const roles = await response.json();
-        const roleSelect = document.getElementById('roleSelect');
-        roles.forEach(role => {
-            const option = document.createElement('option');
-            option.value = role.id; // Assuming role.id is the unique identifier for each role
-            option.textContent = role.name; // Assuming role.name is the name of the role
-            roleSelect.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Failed to fetch roles:', error);
-    }
-}
-
-// Call the fetchRoles function when the page loads
-document.addEventListener('DOMContentLoaded', fetchRoles);  
