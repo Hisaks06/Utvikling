@@ -1,5 +1,6 @@
 const multer = require('multer');
 const express = require("express");
+const cors = require('cors');
 const path = require("path");
 const bcrypt = require("bcrypt");
 const sqlite3 = require('better-sqlite3');
@@ -16,6 +17,12 @@ const staticPath = path.join(__dirname, 'public');
 
 app.use(express.urlencoded({ extended: true }));
 
+// Add middleware to parse incoming JSON data
+app.use(express.json());
+
+// Configure CORS to allow requests from your client's origin
+app.use(cors());
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -27,7 +34,7 @@ app.use(express.static(staticPath));
 //Checks if password and familycode are correct, gives them data back
 app.post('/login', upload.none(), (req, res) => {
     try {
-        let user = checkUserPassword(req.body.familycode, req.body.username, req.body.password);
+        let user = checkUserPassword(req.body.username, req.body.password);
         if (user != null) {
             req.session.loggedIn = true;
             req.session.username = user.username;
@@ -45,75 +52,26 @@ app.post('/login', upload.none(), (req, res) => {
 
 app.post('/register', (req, res) => {
     const reguser = req.body;
-    const familyId = addFamily(reguser.lastname); // Create a new family entry with the user's last name
-    if (familyId) {
-        const user = addUser(reguser.username, reguser.firstname, reguser.lastname, reguser.epost, reguser.password, reguser.mobile, reguser.role, familyId);
-        if (user) {
-            req.session.loggedIn = true;
-            req.session.username = user.username;
-            req.session.userrole = user.role;
-            req.session.userid = user.userid;
-            res.send(true);
-        } else {
-            res.send(false);
-        }
+    const user = addUser(reguser.username, reguser.firstname, reguser.lastname, reguser.email, reguser.password, reguser.mobile, reguser.age, reguser.role);
+    if (user) {
+        req.session.loggedIn = true;
+        req.session.username = user.username;
+        req.session.userrole = user.role;
+        req.session.userid = user.userid;
+        res.send(true);
     } else {
         res.send(false);
     }
 });
 
-function checkUserPassword(familyName, username, password) {
-    const sql = db.prepare(`
-        SELECT user.id AS userid, username, role.name AS role, password 
-        FROM user 
-        INNER JOIN role ON user.idrole = role.id 
-        INNER JOIN family ON user.idfamily = family.id 
-        WHERE username = ? AND family.name = ?
-    `);
-    let user = sql.get(username, familyName);
-    if (user && bcrypt.compareSync(password, user.password)) {
-        return user;
-    } else {
-        return null;
-    }
-}
-
-
-// Middleware to check if the user is logged in and has appropriate role
-function checkLoggedIn(req, res, next) {
-    if (!req.session.loggedIn || req.session.userrole === 'unknown') {
-        res.sendFile(path.join(__dirname, "public/login.html"));
-    } else {
-        next();
-    }
-}
-
-// Middleware to check if the user is allowed to create a new task
-function checkTaskCreationPermission(req, res, next) {
-    if (req.session.userrole === 'unknown') {
-        res.status(403).send("Forbidden: Unknown users cannot create tasks.");
-    } else {
-        next();
-    }
-}
-
-
-function addUser(username, firstname, lastname, email, password, mobile, idrole, idfamily) {
+function addUser(username, firstname, lastname, email, password, mobile, age, idrole) {
     const hash = bcrypt.hashSync(password, saltRounds);
     
     // First, insert the user into the user table
-    const sqlUser = db.prepare("INSERT INTO user (username, firstname, lastname, email, password, mobile, idrole, idfamily) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    const sqlUser = db.prepare("INSERT INTO user (username, firstname, lastname, email, password, mobile, age, idrole) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     try {
-        const info = sqlUser.run(username, firstname, lastname, email, hash, mobile, idrole, idfamily);
+        const info = sqlUser.run(username, firstname, lastname, email, hash, mobile, age, idrole);
         const insertedUserId = info.lastInsertRowid;
-        
-        // Retrieve the family id
-        const sqlGetFamilyId = db.prepare("SELECT id FROM family WHERE name = ?");
-        const familyId = sqlGetFamilyId.get(lastname).id;
-        
-        // Update the user's family id
-        const sqlUpdateFamilyId = db.prepare("UPDATE user SET idfamily = ? WHERE id = ?");
-        sqlUpdateFamilyId.run(familyId, insertedUserId);
         
         // Return the user data
         const user = getUserById(insertedUserId);
@@ -125,32 +83,84 @@ function addUser(username, firstname, lastname, email, password, mobile, idrole,
 }
 
 
-function addFamily(lastname) {
-    // Check if the family already exists in the table
-    const sqlCheckFamily = db.prepare("SELECT id FROM family WHERE name = ?");
-    let existingFamily = sqlCheckFamily.get(lastname);
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, "public/login.html"));
+});
 
-    if (existingFamily) {
-        let newLastName = lastname;
-        let suffix = 1;
-        
-        // Generate a unique family name
-        while (existingFamily) {
-            newLastName = `${lastname}_${suffix}`;
-            existingFamily = sqlCheckFamily.get(newLastName);
-            suffix++;
-        }
-        lastname = newLastName; // Update the family name to the unique one
-    }
+// Handle POST request to edit user profile
+app.post('/editProfile', (req, res) => {
+    // Extract edited data from the request body
+    const { editedUsername, editedFirstName, editedLastName, editedEmail, editedMobile, editedAge, editedPassword } = req.body;
 
-    // Insert the new family into the database
-    const sqlInsertFamily = db.prepare("INSERT INTO family (name) VALUES (?)");
+    // Hash the edited password before updating the database
+    const hashedPassword = bcrypt.hashSync(editedPassword, saltRounds);
+
+    // Update the user profile in the database
+    const updateQuery = `
+        UPDATE user 
+        SET username = ?, 
+            firstname = ?, 
+            lastname = ?, 
+            email = ?, 
+            mobile = ?, 
+            age = ?, 
+            password = ?
+        WHERE id = ?`;
+
     try {
-        const info = sqlInsertFamily.run(lastname);
-        return info.lastInsertRowid; // Return the ID of the newly inserted family entry
+        const stmt = db.prepare(updateQuery);
+        stmt.run(editedUsername, editedFirstName, editedLastName, editedEmail, editedMobile, editedAge, hashedPassword, req.session.userid, (err) => {
+            if (err) {
+                console.error('Error updating user profile:', err);
+                res.status(500).json({ success: false, error: 'Internal Server Error' });
+            } else {
+                // Send a success response
+                res.json({ success: true });
+            }
+        });
     } catch (error) {
-        console.error("Error adding family:", error);
+        console.error('Error updating user profile:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+
+function checkUserPassword(username, password) {
+    const sql = db.prepare(`
+        SELECT user.id AS userid, username, role.name AS role, password 
+        FROM user 
+        INNER JOIN role ON user.idrole = role.id 
+        WHERE username = ?
+    `);
+    let user = sql.get(username);
+    if (user && bcrypt.compareSync(password, user.password)) {
+        return user;
+    } else {
         return null;
+    }
+}
+
+
+// Middleware to check if the user is logged in
+function checkLoggedIn(req, res, next) {
+    console.log(1)
+    if (!req.session.loggedIn) {
+        console.log(2)
+        res.sendFile(path.join(__dirname, "public/login.html")); // Send the login page
+        console.log(3)
+    } else {
+        next();
+    }
+}
+
+// Middleware to check if the user is authenticated and has the admin role
+function checkAdmin(req, res, next) {
+    if (req.session.loggedIn && req.session.userrole === 'admin') {
+        // User is authenticated and has admin role, allow access
+        next();
+    } else {
+        // User is not authorized, redirect to login page or display an error
+        res.redirect('/login'); // Assuming you have a login route
     }
 }
 
@@ -160,61 +170,433 @@ function getUserById(userId) {
     return user;
 }
 
-// Server-Side (Backend)
-/*app.post('/invite', checkLoggedIn, (req, res) => {
-    const { username, familyName } = req.body;
+// Route to handle user creation by admin
+app.post('/admin/project', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/project');
 
-    // Check if the family exists
-    const familyId = getFamilyIdByName(familyName);
-    if (!familyId) {
-        res.status(400).send("Family does not exist");
-        return;
-    }
+    // Log the request body
+    console.log('Request body:', req.body);
 
-    // Update the user's family
-    const success = updateUserFamily(username, familyId);
-    if (success) {
-        res.status(200).send("User invited to family successfully");
+    // Extract user data from the request body
+    const { name, description, category, status, completedBy } = req.body;
+
+    // Add the new user to the database
+    const project = addProject(name, description, category, status, completedBy);
+    
+    if (project) {
+        // Return success response if user is added successfully
+        res.status(201).json({ success: true, message: 'project added successfully', project: project });
     } else {
-        res.status(500).send("Failed to invite user to family");
+        // Return error response if user addition fails
+        res.status(500).json({ success: false, error: 'Failed to add project' });
     }
 });
 
-// Function to update user's family in the database
-function updateUserFamily(username, familyId) {
-    // Retrieve the user id based on the username
-    const sqlGetUserId = db.prepare("SELECT id FROM user WHERE username = ?");
-    const user = sqlGetUserId.get(username);
-    if (!user) {
-        return false; // User not found
-    }
+// Update a project record
+app.put('/projects/:id', (req, res) => {
+    const projectId = req.params.id;
+    const { name, description, category, status, completedBy } = req.body;
 
-    // Update the user's family id
-    const sqlUpdateFamilyId = db.prepare("UPDATE user SET idfamily = ? WHERE id = ?");
     try {
-        sqlUpdateFamilyId.run(familyId, user.id);
-        return true; // Successfully updated the user's family
-    } catch (error) {
-        console.error("Error updating user's family:", error);
-        return false; // Failed to update the user's family
-    }
-}
+        const updateQuery = `
+            UPDATE project 
+            SET name = ?, 
+                description = ?, 
+                category = ?, 
+                status = ?, 
+                completedBy = ?
+            WHERE id = ?`;
 
-// Function to get family id by name
-function getFamilyIdByName(familyName) {
-    const sql = db.prepare("SELECT id FROM family WHERE name = ?");
-    const family = sql.get(familyName);
-    return family ? family.id : null;
-}*/
+        const stmt = db.prepare(updateQuery);
+        stmt.run(name, description, category, status, completedBy, projectId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error updating project:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Delete a project record
+app.delete('/projects/:id', (req, res) => {
+    const projectId = req.params.id;
+
+    try {
+        const deleteQuery = `
+            DELETE FROM project
+            WHERE id = ?`;
+
+        const stmt = db.prepare(deleteQuery);
+        stmt.run(projectId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error deleting project:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Route to handle user creation by admin
+app.post('/admin/user', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/user');
+
+    // Log the request body
+    console.log('Request body:', req.body);
+
+    // Extract user data from the request body
+    const { username, firstname, lastname, email, password, mobile, age, idrole } = req.body;
+
+    if (!password) {
+        return res.status(400).json({ success: false, error: 'Password is required' });
+    }
+
+    // Hash the password
+    const hash = bcrypt.hashSync(password, saltRounds);
+
+    // Add the new user to the database
+    const user = addUser(username, firstname, lastname, email, hash, mobile, age, idrole);
+    
+    if (user) {
+        // Return success response if user is added successfully
+        res.status(201).json({ success: true, message: 'User added successfully', user: user });
+    } else {
+        // Return error response if user addition fails
+        res.status(500).json({ success: false, error: 'Failed to add user' });
+    }
+});
+
+// Route to handle editing user profile by admin
+app.put('/admin/user/:id', checkAdmin, (req, res) => {
+    const userId = req.params.id;
+    const { username, firstname, lastname, email, mobile, age, idrole } = req.body;
+
+    try {
+        // Update user information in the database
+        const updateQuery = `
+            UPDATE user 
+            SET username = ?, 
+                firstname = ?, 
+                lastname = ?, 
+                email = ?, 
+                mobile = ?, 
+                age = ?, 
+                idrole = ?
+            WHERE id = ?`;
+
+        const stmt = db.prepare(updateQuery);
+        stmt.run(username, firstname, lastname, email, mobile, age, idrole, userId);
+        res.status(200).json({ success: true }); // Send success response
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' }); // Internal server error
+    }
+});
+
+// Route to handle deleting a user by admin
+app.delete('/admin/user/:id', checkAdmin, (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        // Delete user from the database
+        const deleteQuery = `
+            DELETE FROM user
+            WHERE id = ?`;
+
+        const stmt = db.prepare(deleteQuery);
+        stmt.run(userId);
+        res.status(200).json({ success: true }); // Send success response
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' }); // Internal server error
+    }
+});
+
+// Route to handle user creation by admin
+app.post('/admin/role', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/role');
+
+    // Log the request body
+    console.log('Request body:', req.body);
+
+    // Extract user data from the request body
+    const { name } = req.body;
+
+    // Add the new user to the database
+    const role = addRole(name);
+    
+    if (role) {
+        // Return success response if user is added successfully
+        res.status(201).json({ success: true, message: 'role added successfully', role: role });
+    } else {
+        // Return error response if user addition fails
+        res.status(500).json({ success: false, error: 'Failed to add role' });
+    }
+});
+
+// Update a role record
+app.put('/role/:id', (req, res) => {
+    const roleId = req.params.id;
+    const { name } = req.body;
+
+    try {
+        const updateQuery = `
+            UPDATE role 
+            SET name = ?
+            WHERE id = ?`;
+
+        const stmt = db.prepare(updateQuery);
+        stmt.run(name, roleId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error updating role:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Delete a role record
+app.delete('/role/:id', (req, res) => {
+    const roleId = req.params.id;
+
+    try {
+        const deleteQuery = `
+            DELETE FROM role
+            WHERE id = ?`;
+
+        const stmt = db.prepare(deleteQuery);
+        stmt.run(roleId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error deleting role:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Route to handle category creation by admin
+app.post('/admin/category', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/category');
+
+    // Log the request body
+    console.log('Request body:', req.body);
+
+    // Extract category data from the request body
+    const { name } = req.body;
+
+    // Add the new category to the database
+    const category = addCategory(name);
+    
+    if (category) {
+        // Return success response if category is added successfully
+        res.status(201).json({ success: true, message: 'category added successfully', category: category });
+    } else {
+        // Return error response if category addition fails
+        res.status(500).json({ success: false, error: 'Failed to add category' });
+    }
+});
+
+// Update a category record
+app.put('/category/:id', (req, res) => {
+    const categoryId = req.params.id;
+    const { name } = req.body;
+
+    try {
+        const updateQuery = `
+            UPDATE category 
+            SET name = ?
+            WHERE id = ?`;
+
+        const stmt = db.prepare(updateQuery);
+        stmt.run(name, categoryId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error updating category:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Delete a category record
+app.delete('/category/:id', (req, res) => {
+    const categoryId = req.params.id;
+
+    try {
+        const deleteQuery = `
+            DELETE FROM category
+            WHERE id = ?`;
+
+        const stmt = db.prepare(deleteQuery);
+        stmt.run(categoryId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Error deleting category:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+app.get('/editProfile', checkLoggedIn, (req, res) => {
+    // Assuming you have a function to fetch the user's current profile data
+    const userId = req.session.userid;
+    const userProfile = getUserProfile(userId);
+
+    if (userProfile) {
+        // If the user profile data is retrieved successfully, render the edit profile form
+        res.render('editProfile', { userProfile });
+    } else {
+        // If the user profile data cannot be retrieved, send an error response
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Define a route to fetch all data for the admin page
+app.get('/admin/data', (req, res) => {
+    try {
+        // Query the database to fetch all data
+        const sql = db.prepare(`
+            SELECT user.username, user.firstname, user.lastname, user.email, user.password, user.mobile, user.age, role.name AS role
+            FROM user
+            INNER JOIN role ON user.idRole = role.id
+        `);
+        const data = sql.all();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Define a route to fetch all data for the project table
+app.get('/projects/data', (req, res) => {
+    try {
+        // Query the database to fetch all project data
+        const sql = db.prepare(`
+            SELECT * 
+            FROM project
+        `);
+        const data = sql.all();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching project data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Define a route to fetch data for the role table
+app.get('/roles/data', (req, res) => {
+    try {
+        // Query the database to fetch all role data
+        const sql = db.prepare(`
+            SELECT * 
+            FROM role
+        `);
+        const data = sql.all();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching role data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Define a route to fetch data for the category table
+app.get('/categories/data', (req, res) => {
+    try {
+        // Query the database to fetch all category data
+        const sql = db.prepare(`
+            SELECT * 
+            FROM category
+        `);
+        const data = sql.all();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching category data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Define a route to handle admin operations for a specific user
+app.get('/admin/user/:id', checkAdmin, (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        // Query the database to fetch user details by user ID
+        const sql = db.prepare(`
+            SELECT user.id, user.username, user.firstname, user.lastname, user.email, user.mobile, user.age, role.name AS role
+            FROM user
+            INNER JOIN role ON user.idrole = role.id
+            WHERE user.id = ?
+        `);
+        const user = sql.get(userId);
+
+        if (user) {
+            res.json(user); // Send user details as JSON response
+        } else {
+            res.status(404).json({ error: 'User not found' }); // User with given ID not found
+        }
+    } catch (error) {
+        console.error('Error fetching user data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' }); // Internal server error
+    }
+});
+
+// Route to update user information
+app.put('/admin/user/:id', checkAdmin, (req, res) => {
+    const userId = req.params.id;
+    const { username, firstname, lastname, email, mobile, age, idrole } = req.body;
+
+    try {
+        // Update user information in the database
+        const updateQuery = `
+            UPDATE user 
+            SET username = ?, 
+                firstname = ?, 
+                lastname = ?, 
+                email = ?, 
+                mobile = ?, 
+                age = ?, 
+                idrole = ?
+            WHERE id = ?`;
+
+        const stmt = db.prepare(updateQuery);
+        stmt.run(username, firstname, lastname, email, mobile, age, idrole, userId);
+        res.status(200).json({ success: true }); // Send success response
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' }); // Internal server error
+    }
+});
+
+// Route to delete a user
+app.delete('/admin/user/:id', checkAdmin, (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        // Delete user from the database
+        const deleteQuery = `
+            DELETE FROM user
+            WHERE id = ?`;
+
+        const stmt = db.prepare(deleteQuery);
+        stmt.run(userId);
+        res.status(200).json({ success: true }); // Send success response
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' }); // Internal server error
+    }
+});
+
+
+// Route to serve admin.html, protected by checkAdmin middleware
+app.get('/admin', checkAdmin, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/admin.html'));
+});
 
 app.get('/currentUser', checkLoggedIn,  (req, res) => {
-    const sql = db.prepare('SELECT user.id AS userid, username, role.name AS role, firstname, lastname FROM user INNER JOIN role ON user.idrole = role.id WHERE user.id = ?');
+    const sql = db.prepare('SELECT user.id AS userid, username, role.name AS role, firstname, lastname, email, mobile, age FROM user INNER JOIN role ON user.idrole = role.id WHERE user.id = ?');
     const user = sql.get(req.session.userid);
-    res.send([user.userid, user.username, user.role, user.firstname, user.lastname]);
+    res.send([user.userid, user.username, user.role, user.firstname, user.lastname, user.email, user.mobile, user.age]);
 });
 
 app.get('/', checkLoggedIn, (req, res) => {
-    res.sendFile(path.join(__dirname, "public/index.html"));
+    res.sendFile(path.join(__dirname, "public/login.html"));
 });
 
 app.get('/users', checkLoggedIn,  (req, res) => {
@@ -233,6 +615,30 @@ app.get('/roles', (req, res) => {
         res.json(role);
     } catch (error) {
         console.error('Error fetching roles from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.get('/category', (req, res) => {
+    try {
+        // Query the database to fetch role names
+        const sql = db.prepare('SELECT * FROM category');
+        const category = sql.all();
+        res.json(category);
+    } catch (error) {
+        console.error('Error fetching category from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.get('/project', (req, res) => {
+    try {
+        // Query the database to fetch role names
+        const sql = db.prepare('SELECT * FROM project');
+        const project = sql.all();
+        res.json(project);
+    } catch (error) {
+        console.error('Error fetching project from database:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });

@@ -19,6 +19,7 @@ margin-top: 50px;
 }
 
 form {
+display: block;
 width: 300px;
 margin: 0 auto;
 background-color: #fff;
@@ -59,6 +60,45 @@ padding: 10px;
 border: 1px solid #ccc;
 border-radius: 5px;
 margin-bottom: 20px;
+}
+
+#addUserForm{
+  display: none;
+  width: 300px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+#addProjectForm{
+  display: none;
+  width: 300px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+#addRoleForm{
+  display: none;
+  width: 300px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+#addCategoryForm{
+  display: none;
+  width: 300px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
 button[type="submit"] {
@@ -194,6 +234,24 @@ margin-bottom: 0;
   display: none;
   justify-content: space-between;
   align-items: center;
+}
+
+#loginFeedback{
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+}
+
+#center{
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+}
+
+.center{
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
 }
 
 :root {
@@ -344,6 +402,13 @@ input{
   visibility: hidden;
   display: none;
 }
+
+.userdata {
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+}
+
 span{
   position:absolute;
   right: -40px;
@@ -363,4 +428,242 @@ span{
 }
 #check:checked ~ .menu #bars{
   display: none;
+}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 750px;
+  max-height: 100%;
+  position: relative;
+  margin: auto;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+/* Watermark style */
+.watermark {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: rgba(0, 0, 0, 0.5); /* Adjust the color and opacity */
+  font-size: 24px;
+  pointer-events: none; /* Ensure the watermark doesn't interfere with clicking */
+}
+
+@media screen and (max-width: 600px) {
+  .art{
+    max-width: 750px;
+    max-height: 100%;
+    position: relative;
+    margin: auto;
+  }
+}
+
+.hide {
+  display: none !important;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Ruda:wght@400;600;700&display=swap");
+:root {
+  --calendar-bg-color: #262829;
+  --calendar-font-color: #fff;
+  --weekdays-border-bottom-color: #404040;
+  --calendar-date-hover-color: #b3b3b3;
+  --calendar-dummy-color: #505050;
+  --calendar-current-date-color: #1b1f21;
+  --calendar-today-color: linear-gradient(to bottom, #03a9f4, #2196f3);
+}
+.calendar {
+  background-color: var(--calendar-bg-color);
+  color: var(--calendar-font-color);
+  border-radius: var(--calendar-border-radius);
+  max-width: 450px;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 5px 5px 10px var(--calendar-bg-color);
+}
+.calendar_inner {
+  padding: 2rem;
+  position: relative;
+}
+.calendar_headings {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+.fa-solid.fa-arrow-left,
+.fa-solid.fa-arrow-right {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+.current_datetime {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--calendar-current-date-color);
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+}
+.current_datetime .daytxt {
+  background-color: green;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  color: var(--calendar-font-color);
+}
+.days_date ul {
+  list-style-type: none;
+}
+.days_date .days,
+.dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+.days_date .days {
+  margin: 1rem 0;
+}
+.days_date .days li {
+  border-bottom: 2px solid var(--weekdays-border-bottom-color);
+  margin: 0 0.2rem;
+}
+.dates li {
+  padding: 0.5rem;
+  margin: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 5px;
+  color: var(--calendar-font-color);
+}
+.days_date .dates li:hover {
+  background-color: var(--calendar-date-hover-color);
+  color: var(--calendar-bg-color);
+}
+.days_date .dates li.active {
+  background: var(--calendar-today-color);
+}
+.days_date .dummy {
+  color: var(--calendar-dummy-color);
+}
+
+.calendar_date{
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+}
+
+/* Add more specific styling for input fields within the form */
+form input[type="text"],
+form input[type="password"],
+form input[type="mail"],
+form input[type="number"],
+form textarea {
+    visibility: visible; /* Ensure input fields are visible */
+    display: inline-block; /* Ensure input fields are displayed */
+}
+
+/* Override any other styles that might affect input fields within the form */
+form input,
+form textarea {
+    /* Add your custom styles here */
+}
+
+/* CSS for table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
 }
