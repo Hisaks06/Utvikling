@@ -144,11 +144,8 @@ function checkUserPassword(username, password) {
 
 // Middleware to check if the user is logged in
 function checkLoggedIn(req, res, next) {
-    console.log(1)
     if (!req.session.loggedIn) {
-        console.log(2)
         res.sendFile(path.join(__dirname, "public/login.html")); // Send the login page
-        console.log(3)
     } else {
         next();
     }
@@ -161,7 +158,7 @@ function checkAdmin(req, res, next) {
         next();
     } else {
         // User is not authorized, redirect to login page or display an error
-        res.redirect('/login'); // Assuming you have a login route
+        res.sendFile(path.join(__dirname, "public/login.html")); // Assuming you have a login route
     }
 }
 
@@ -285,10 +282,36 @@ app.post('/admin/user', checkAdmin, (req, res) => {
     }
 });
 
-// Route to handle editing user profile by admin
-app.put('/admin/user/:id', checkAdmin, (req, res) => {
+// Define a route to handle admin operations for a specific user
+app.get('/admin/user/:id', checkAdmin, (req, res) => {
     const userId = req.params.id;
-    const { username, firstname, lastname, email, mobile, age, idrole } = req.body;
+
+    try {
+        // Query the database to fetch user details by user ID
+        const sql = db.prepare(`
+            SELECT user.id, user.username, user.firstname, user.lastname, user.email, user.mobile, user.age, role.name AS role
+            FROM user
+            INNER JOIN role ON user.idrole = role.id
+            WHERE user.id = ?
+        `);
+        const user = sql.get(userId);
+
+        if (user) {
+            res.json(user); // Send user details as JSON response
+        } else {
+            res.status(404).json({ error: 'User not found' }); // User with given ID not found
+        }
+    } catch (error) {
+        console.error('Error fetching user data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' }); // Internal server error
+    }
+});
+
+// Route to update user information
+app.put('/admin/user/:id', checkAdmin, (req, res) => {
+    const hash = bcrypt.hashSync(password, saltRounds);
+    const userId = req.params.id;
+    const { username, firstname, lastname, email, password, mobile, age, idrole } = req.body;
 
     try {
         // Update user information in the database
@@ -298,13 +321,14 @@ app.put('/admin/user/:id', checkAdmin, (req, res) => {
                 firstname = ?, 
                 lastname = ?, 
                 email = ?, 
+                password = ?,
                 mobile = ?, 
                 age = ?, 
                 idrole = ?
             WHERE id = ?`;
 
         const stmt = db.prepare(updateQuery);
-        stmt.run(username, firstname, lastname, email, mobile, age, idrole, userId);
+        stmt.run(username, firstname, lastname, email, password,mobile, age, idrole, userId);
         res.status(200).json({ success: true }); // Send success response
     } catch (error) {
         console.error('Error updating user:', error);
@@ -312,7 +336,7 @@ app.put('/admin/user/:id', checkAdmin, (req, res) => {
     }
 });
 
-// Route to handle deleting a user by admin
+// Route to delete a user
 app.delete('/admin/user/:id', checkAdmin, (req, res) => {
     const userId = req.params.id;
 
@@ -374,7 +398,7 @@ app.post('/admin/role', checkAdmin, (req, res) => {
 });
 
 // Update a role record
-app.put('/role/:id', (req, res) => {
+app.put('/admin/role/:id', (req, res) => {
     const roleId = req.params.id;
     const { name } = req.body;
 
@@ -394,7 +418,7 @@ app.put('/role/:id', (req, res) => {
 });
 
 // Delete a role record
-app.delete('/role/:id', (req, res) => {
+app.delete('/admin/role/:id', (req, res) => {
     const roleId = req.params.id;
 
     try {
@@ -510,7 +534,7 @@ app.get('/admin/data', (req, res) => {
     try {
         // Query the database to fetch all data
         const sql = db.prepare(`
-            SELECT user.username, user.firstname, user.lastname, user.email, user.password, user.mobile, user.age, role.name AS role
+            SELECT user.id, user.username, user.firstname, user.lastname, user.email, user.password, user.mobile, user.age, role.name AS role
             FROM user
             INNER JOIN role ON user.idRole = role.id
         `);
@@ -569,78 +593,6 @@ app.get('/categories/data', (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-// Define a route to handle admin operations for a specific user
-app.get('/admin/user/:id', checkAdmin, (req, res) => {
-    const userId = req.params.id;
-
-    try {
-        // Query the database to fetch user details by user ID
-        const sql = db.prepare(`
-            SELECT user.id, user.username, user.firstname, user.lastname, user.email, user.mobile, user.age, role.name AS role
-            FROM user
-            INNER JOIN role ON user.idrole = role.id
-            WHERE user.id = ?
-        `);
-        const user = sql.get(userId);
-
-        if (user) {
-            res.json(user); // Send user details as JSON response
-        } else {
-            res.status(404).json({ error: 'User not found' }); // User with given ID not found
-        }
-    } catch (error) {
-        console.error('Error fetching user data from database:', error);
-        res.status(500).json({ error: 'Internal Server Error' }); // Internal server error
-    }
-});
-
-// Route to update user information
-app.put('/admin/user/:id', checkAdmin, (req, res) => {
-    const userId = req.params.id;
-    const { username, firstname, lastname, email, mobile, age, idrole } = req.body;
-
-    try {
-        // Update user information in the database
-        const updateQuery = `
-            UPDATE user 
-            SET username = ?, 
-                firstname = ?, 
-                lastname = ?, 
-                email = ?, 
-                mobile = ?, 
-                age = ?, 
-                idrole = ?
-            WHERE id = ?`;
-
-        const stmt = db.prepare(updateQuery);
-        stmt.run(username, firstname, lastname, email, mobile, age, idrole, userId);
-        res.status(200).json({ success: true }); // Send success response
-    } catch (error) {
-        console.error('Error updating user:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' }); // Internal server error
-    }
-});
-
-// Route to delete a user
-app.delete('/admin/user/:id', checkAdmin, (req, res) => {
-    const userId = req.params.id;
-
-    try {
-        // Delete user from the database
-        const deleteQuery = `
-            DELETE FROM user
-            WHERE id = ?`;
-
-        const stmt = db.prepare(deleteQuery);
-        stmt.run(userId);
-        res.status(200).json({ success: true }); // Send success response
-    } catch (error) {
-        console.error('Error deleting user:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' }); // Internal server error
-    }
-});
-
 
 // Route to serve admin.html, protected by checkAdmin middleware
 app.get('/admin', checkAdmin, (req, res) => {

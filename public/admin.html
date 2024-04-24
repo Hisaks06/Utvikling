@@ -33,10 +33,12 @@
         <table>
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Username</th>
                     <th>Firstname</th>
                     <th>Lastname</th>
                     <th>Email</th>
+                    <th>Password</th>
                     <th>Mobile</th>
                     <th>Age</th>
                     <th>Role</th>
@@ -72,6 +74,35 @@
                     <select name="role" id="roleSelect">
                     </select><br>
                     <button type="submit">Add User</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit User Modal -->
+        <div id="editUserModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form id="editUserForm" style="display: none;">
+                    <h2>Edit User:</h2>
+                    <br>
+                    <label for="usernameInput">Username:</label>
+                    <input type="text" id="usernameInput" name="username" required><br>
+                    <label for="firstnameInput">First Name:</label>
+                    <input type="text" id="firstnameInput" name="firstname" required><br>
+                    <label for="lastnameInput">Last Name:</label>
+                    <input type="text" id="lastnameInput" name="lastname" required><br>
+                    <label for="emailInput">Email:</label>
+                    <input type="text" id="emailInput" name="email" required><br>
+                    <label for="passwordInput">Password:</label>
+                    <input type="password" id="passwordInput" name="password" required><br>
+                    <label for="mobileInput">Mobile:</label>
+                    <input type="text" id="mobileInput" name="mobile" required><br>
+                    <label for="ageInput">Age:</label>
+                    <input type="text" id="ageInput" name="age" required><br>
+                    <label for="roleInput">Role:</label>
+                    <input type="text" id="roleInput" name="role" required><br>
+                    <input type="submit" value="Save Changes">
+                    <button onclick="saveChanges()">Save</button>
                 </form>
             </div>
         </div>
@@ -115,6 +146,29 @@
                 </form>
             </div>
         </div>
+
+        <!-- Edit Project Modal -->
+        <div id="editProjectModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form id="editProjectForm" style="display: none;">
+                    <h2>Edit Project:</h2>
+                    <br>
+                    <label for="nameInput">Name:</label>
+                    <input type="text" id="nameInput" name="name" required><br>
+                    <label for="descriptionInput">Description:</label>
+                    <input type="text" id="descriptionInput" name="description" required><br>
+                    <label for="categoryInput">Category:</label>
+                    <input type="text" id="categoryInput" name="category" required><br>
+                    <label for="statusInput">Status:</label>
+                    <input type="text" id="statusInput" name="status" required><br>
+                    <label for="completedByInput">Completed By:</label>
+                    <input type="text" id="completedByInput" name="completedBy" required><br>
+                    <input type="submit" value="Save Changes">
+                    <button onclick="saveChanges()">Save</button>
+                </form>
+            </div>
+        </div>
     </article>
     <article>
         <h2>Project Role</h2>
@@ -143,6 +197,21 @@
                 </form>
             </div>
         </div>
+
+        <!-- Edit Role Modal -->
+        <div id="editRoleModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form id="editRoleForm" style="display: none;">
+                    <h2>Edit Role:</h2>
+                    <br>
+                    <label for="roleNameInput">Name:</label>
+                    <input type="text" id="roleNameInput" name="role" required><br>
+                    <input type="submit" value="Save Changes">
+                    <button onclick="saveChanges()">Save</button>
+                </form>
+            </div>
+        </div>
     </article>
     <article>
         <h2>Project Category</h2>
@@ -168,6 +237,21 @@
                     <label for="categoryname">Name:</label>
                     <input type="text" id="categoryname" name="categoryname" required><br>
                     <button type="submit">Add Category</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Category Modal -->
+        <div id="editCategoryModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form id="editCategoryForm" style="display: none;">
+                    <h2>Edit Category:</h2>
+                    <br>
+                    <label for="categoryNameInput">Name:</label>
+                    <input type="text" id="categoryNameInput" name="category" required><br>
+                    <input type="submit" value="Save Changes">
+                    <button onclick="saveChanges()">Save</button>
                 </form>
             </div>
         </div>

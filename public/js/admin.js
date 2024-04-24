@@ -157,19 +157,22 @@ fetch('/admin/data')
     .then(response => response.json())
     .then(data => {
         const adminDataBody = document.getElementById('adminDataBody');
-        data.forEach(item => {
+        data.forEach(user => {
+            console.log(user);
             const row = `
                 <tr>
-                    <td>${item.username}</td>
-                    <td>${item.firstname}</td>
-                    <td>${item.lastname}</td>
-                    <td>${item.email}</td>
-                    <td>${item.mobile}</td>
-                    <td>${item.age}</td>
-                    <td>${item.role}</td>
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.firstname}</td>
+                    <td>${user.lastname}</td>
+                    <td>${user.email}</td>
+                    <td>${user.password}
+                    <td>${user.mobile}</td>
+                    <td>${user.age}</td>
+                    <td>${user.role}</td>
                     <td>
-                        <button onclick="editUser(${item.id})">Edit</button>
-                        <button onclick="deleteUser(${item.id})">Delete</button>
+                        <button onclick="editUser(${user.id})">Edit</button>
+                        <button onclick="deleteUser(${user.id})">Delete</button>
                     </td>
                 </tr>
             `;
@@ -184,6 +187,7 @@ fetch('/projects/data')
     .then(data => {
         const projectDataBody = document.getElementById('projectDataBody');
         data.forEach(project => {
+            console.log(project);
             const row = `
                 <tr>
                     <td>${project.id}</td>
@@ -209,6 +213,7 @@ fetch('/roles/data')
     .then(data => {
         const roleDataBody = document.getElementById('roleDataBody');
         data.forEach(role => {
+            console.log(role);
             const row = `
                 <tr>
                     <td>${role.id}</td>
@@ -230,6 +235,7 @@ fetch('/categories/data')
     .then(data => {
         const categoryDataBody = document.getElementById('categoryDataBody');
         data.forEach(category => {
+            console.log(category);
             const row = `
                 <tr>
                     <td>${category.id}</td>
@@ -247,7 +253,6 @@ fetch('/categories/data')
 
 // Function to handle edit user
 function editUser(userId) {
-// Assume there's a form for editing users with input fields for username, firstname, lastname, email, mobile, age, and role
 // Fetch the user data by userId
 fetch(`/admin/user/${userId}`)
 .then(response => response.json())
@@ -257,6 +262,7 @@ fetch(`/admin/user/${userId}`)
     document.getElementById('firstnameInput').value = user.firstname;
     document.getElementById('lastnameInput').value = user.lastname;
     document.getElementById('emailInput').value = user.email;
+    document.getElementById('passwordInput').value = user.password;
     document.getElementById('mobileInput').value = user.mobile;
     document.getElementById('ageInput').value = user.age;
     document.getElementById('roleInput').value = user.role;
@@ -404,7 +410,7 @@ function addProject(event) {
 function editRole(roleId) {
 // Assume there's a form for editing roles with an input field for name
 // Fetch the role data by roleId
-fetch(`/roles/${roleId}`)
+fetch(`/admin/roles/${roleId}`)
 .then(response => response.json())
 .then(role => {
     // Populate the form field with role data
@@ -418,21 +424,35 @@ fetch(`/roles/${roleId}`)
 
 // Function to handle delete role
 function deleteRole(roleId) {
-// Send a DELETE request to delete the role by roleId
-fetch(`/roles/${roleId}`, {
-method: 'DELETE'
-})
-.then(response => {
-if (response.ok) {
-    // Remove the role row from the table
-    document.getElementById(`roleRow${roleId}`).remove();
-    console.log(`Role with ID ${roleId} deleted successfully.`);
-} else {
-    console.error(`Error deleting role with ID ${roleId}.`);
+    // Prompt the user for confirmation
+    if (!confirm("Are you sure you want to delete this role?")) {
+        return; // If the user cancels, do nothing
+    }
+
+    // Send a DELETE request to delete the role by roleId
+    fetch(`/admin/roles/${roleId}`, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            // Remove the role row from the table
+            document.getElementById(`roleRow${roleId}`).remove();
+            console.log(`Role with ID ${roleId} deleted successfully.`);
+        } else {
+            // Handle server errors
+            console.error(`Error deleting role with ID ${roleId}: ${response.statusText}`);
+            // Optionally provide user feedback about the error
+            alert(`Error deleting role: ${response.statusText}`);
+        }
+    })
+    .catch(error => {
+        // Handle network errors
+        console.error('Network error:', error);
+        // Optionally provide user feedback about the error
+        alert('Network error. Please try again later.');
+    });
 }
-})
-.catch(error => console.error('Error deleting role:', error));
-}
+
 
 // Function to handle form submission for adding a role
 function addRole(event) {
