@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Audio Playlist</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .playlist-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .playlist-item {
+        margin-bottom: 10px;
+      }
+      audio {
+        width: 100%;
+      }
+    </style>
+    </head>
+<body>
+    <div class="playlist-container">
+      <h1>My Custom Audio Playlist</h1>
+      <div class="playlist-item">
+        <h2>Song 1</h2>
+        <audio controls>
+          <source src="audio/song1.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+      <div class="playlist-item">
+        <h2>Song 2</h2>
+        <audio controls>
+          <source src="audio/song2.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+      <!-- Add more playlist items as needed -->
+    </div>
+</body>
+</html>
+<!--<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width">
+    <title>Spotify Embed</title>
+    <link rel="preload" href="https://mosaic.scdn.co/300/ab67616d00001e0202add2c77fb6999e311a3248ab67616d00001e0236c663196e968a1f8b7d6842ab67616d00001e02c2bcff5fed95d5325eec7f91ab67616d00001e02d0f040e8048fd172454ff328" as="image"><meta name="next-head-count" content="4">
+    <link rel="preload" href="https://embed-cdn.spotifycdn.com/_next/static/css/f4338d83daa9ef42.css" as="style">
+    <link rel="stylesheet" href="https://embed-cdn.spotifycdn.com/_next/static/css/f4338d83daa9ef42.css" data-n-g="">
+    <link rel="preload" href="https://embed-cdn.spotifycdn.com/_next/static/css/97bb7063d29771a1.css" as="style">
+    <link rel="stylesheet" href="https://embed-cdn.spotifycdn.com/_next/static/css/97bb7063d29771a1.css" data-n-p="">
+    <link rel="preload" href="https://embed-cdn.spotifycdn.com/_next/static/css/3802f0f0fdd596bb.css" as="style">
+    <link rel="stylesheet" href="https://embed-cdn.spotifycdn.com/_next/static/css/3802f0f0fdd596bb.css" data-n-p="">
+    <noscript data-n-css=""></noscript>
+    <script defer="" nomodule="" src="https://embed-cdn.spotifycdn.com/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js"></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/chunks/webpack-8d467472bec1930b.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/chunks/framework-ca706bf673a13738.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/chunks/main-08df201b32607c28.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/chunks/pages/_app-fb618c1ab0785575.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/chunks/fec483df-ed779ce1028b7b0c.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/chunks/7532-9ada25933e41e6fd.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/chunks/239-6eb6b98f9c269af8.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/chunks/7469-63ead5bc99d818bd.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/chunks/4836-25a7c767a2648287.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/chunks/pages/playlist/%5Bid%5D-c346ed281e7fd8b8.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/bf20fd88-c355-45c2-89e2-951fec31e2a2/_buildManifest.js" defer=""></script>
+    <script src="https://embed-cdn.spotifycdn.com/_next/static/bf20fd88-c355-45c2-89e2-951fec31e2a2/_ssgManifest.js" defer=""></script>
+    <style data-styled="active" data-styled-version="5.3.11"></style>
+    <style data-emotion="css-global" data-s="">
+    body{color:rgb(255, 255, 255);}
+    h1,h2{margin:0;font-size:initial;font-weight:normal;}.no-focus-outline 
+    *:focus{outline:0;}
+    button{margin:0;border:0;padding:0;color:inherit;background-color:transparent;cursor:pointer;}
+    a{color:rgb(255, 255, 255);-webkit-text-decoration:none;text-decoration:none;}
+    button{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}</style>
+</head>
+<!--<body>
+    <div id="__next">
+        <div style="--background-color:118, 118, 118;--image-src:url('https://i1.sndcdn.com/artworks-000203238135-rtlx2z-t500x500.jpg')" data-testid="main-page"><base target="_blank">
+            <div data-testid="embed-widget-container" class="encore-dark-theme TrackListWidget_widgetContainer__VVETD">
+                <div data-testid="initialized-true" class="TrackListWidget_trackListGridContainer__GZGxh">
+                    <div class="TrackListWidget_coverArtContainer__QAXYk">
+                        <div aria-hidden="true" class="CoverArtBase_coverArt__ne0XI CoverArtTrackList_coverArtTrackList__1YwHX"> 
+                        </div>
+                    </div>
+                    <div class="TrackListWidget_spotifyLogoContainer__M1SxS"><a class="" title="logo" href="#playlist" role="button" aria-label="Play on Spotify" data-testid="spotify-logo">
+                        <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 24 24" class="Svg-sc-ytk21e-0 bneLcE">
+                            <path d="M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm5.045 15.866a.686.686 0 0 1-.943.228c-2.583-1.579-5.834-1.935-9.663-1.06a.686.686 0 0 1-.306-1.337c4.19-.958 7.785-.546 10.684 1.226a.686.686 0 0 1 .228.943zm1.346-2.995a.858.858 0 0 1-1.18.282c-2.956-1.817-7.464-2.344-10.961-1.282a.856.856 0 0 1-1.11-.904.858.858 0 0 1 .611-.737c3.996-1.212 8.962-.625 12.357 1.462a.857.857 0 0 1 .283 1.179zm.116-3.119c-3.546-2.106-9.395-2.3-12.78-1.272a1.029 1.029 0 0 1-.597-1.969c3.886-1.18 10.345-.952 14.427 1.471a1.029 1.029 0 0 1-1.05 1.77z"></path>
+                        </svg>
+                    </a>
+                </div>
+                <div class="TrackListWidget_metadataContainer__EP9LF"><h1 class="TitleAndSubtitle_title__Nwyku" data-testid="entity-title">
+                    <div class=""><div class="">
+                        <div class="" style="--trans-x: 0px;"><a href="https://www.youtube.com/watch?v=Hbq5hZbQTb0" data-encore-id="textLink" class="Link-sc-k8gsk-0 fOYHAY">Mixer</a>
+                        </div>
+                    </div>
+                </div>
+            </h1>
+            <span class="TrackListWidget_labelsAndSubtitle__IGHar"><h2 class="TitleAndSubtitle_subtitle__P1cxq">
+                <div class="Marquee_container__CV7du"><div class="Marquee_scrollableContainer__mcSox">
+                    <div class="Marquee_inner__UKCZf" style="--trans-x: 0px;"><span><a href="https://www.youtube.com/watch?v=Hbq5hZbQTb0" dir="auto" data-encore-id="textLink" class="Link-sc-k8gsk-0 fOYHAY">Hisaks</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </h2>
+</span>
+<div data-testid="save-on-spotify" class="AddToLibrary_wrapper__FZKUv">
+        <button data-testid="save-on-spotify-button" title="Saved on Spotify" class="Button-sc-1dqy6lx-0 bTzpio SaveOnSpotifyButton_saveOnSpotifyButton__QCoJx" aria-label="Saved on Spotify" data-encore-id="buttonTertiary">
+            <span aria-hidden="true" class="IconWrapper__Wrapper-sc-16usrgb-0 jEDcnm">
+                <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 24 24" class="Svg-sc-ytk21e-0 bneLcE">
+                    <path d="M1 12C1 5.925 5.925 1 12 1s11 4.925 11 11-4.925 11-11 11S1 18.075 1 12zm16.398-2.38a1 1 0 0 0-1.414-1.413l-6.011 6.01-1.894-1.893a1 1 0 0 0-1.414 1.414l3.308 3.308 7.425-7.425z"></path>
+                </svg>
+            </span>
+            <span data-testid="save-button-label" class="SaveOnSpotifyButton_saveOnSpotifyButtonText__6Jv6P">Saved on Spotify</span>
+        </button>
+    </div>
+</div>
+<div class="TrackListWidget_tagListContainer__I8UFM"></div>
+    <div class="TrackListWidget_playerControlsWrapper__MtZxe">
+        <div class="PlayerControlsExtendedNoAnimation_playerControlsWrapper__wWAaU">
+            <div class="PlayerControlsExtendedNoAnimation_baselineWrapper__V7JOB">
+                <div class="PlayerControlsExtendedNoAnimation_progressBarWrapper__D4yE2" dir="ltr">
+                    <button class="Button-sc-1dqy6lx-0 kVkgcj SkipButtons_seekButton__1Eenz SkipButtons_seekBack____Vi2" disabled="" aria-label="Previous" data-encore-id="buttonTertiary">
+                        <span aria-hidden="true" class="IconWrapper__Wrapper-sc-16usrgb-0 hYdsxw">
+                            <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 16 16" class="Svg-sc-ytk21e-0 dYnaPI">
+                                <path d="M3.3 1a.7.7 0 0 1 .7.7v5.15l9.95-5.744a.7.7 0 0 1 1.05.606v12.575a.7.7 0 0 1-1.05.607L4 9.149V14.3a.7.7 0 0 1-.7.7H1.7a.7.7 0 0 1-.7-.7V1.7a.7.7 0 0 1 .7-.7h1.6z"></path>
+                            </svg>
+                        </span>
+                    </button>
+                    <div role="progressbar" tabindex="0" class="ProgressBar_progressBarContainer__glVHh">
+                        <div class="ProgressBar_progressBarLineBackground__S9lxG">
+                            <div class="ProgressBar_progressBarLineActive__eawR7" style="transform: translateX(-100%);"></div>
+                            <div data-testid="progress-bar-line" id="progress-bar-line" class="ProgressBar_progressBarLine__a7FZb" style="transform: translateX(-100%);"></div>
+                        </div>
+                        <div data-testid="progress-bar-slider" id="progress-bar-slider" class="ProgressBar_progressBarSlider__oFBQJ" style="left: 0%;"></div>
+                    </div>
+                    <button class="Button-sc-1dqy6lx-0 kVkgcj SkipButtons_seekButton__1Eenz SkipButtons_seekForward__M51Hj" disabled="" data-testid="skip-forward" aria-label="Next" data-encore-id="buttonTertiary">
+                        <span aria-hidden="true" class="IconWrapper__Wrapper-sc-16usrgb-0 hYdsxw">
+                            <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 16 16" class="Svg-sc-ytk21e-0 dYnaPI">
+                                <path d="M12.7 1a.7.7 0 0 0-.7.7v5.15L2.05 1.107A.7.7 0 0 0 1 1.712v12.575a.7.7 0 0 0 1.05.607L12 9.149V14.3a.7.7 0 0 0 .7.7h1.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7h-1.6z"></path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+                <button type="button" class="ProgressTimer_progressTimer__EIq8k" aria-label="Progress timestamp">
+                    <span class="ProgressTimer_progressTimeSpacer__aN1q5" aria-hidden="true">-00:00</span>
+                    <span role="timer" class="ProgressTimer_actualProgressTime__kN3ww" data-testid="progress-timestamp">00:00</span>
+                </button>
+                <button class="Button-sc-1dqy6lx-0 kVkgcj OverflowMenuButton_overflowMenuButton__JPKiT" title="More" aria-label="More" data-encore-id="buttonTertiary">
+                    <span aria-hidden="true" class="IconWrapper__Wrapper-sc-16usrgb-0 hYdsxw">
+                        <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 16 16" class="Svg-sc-ytk21e-0 dYnaPI">
+                            <path d="M3 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm6.5 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM16 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+            <div class="PlayerControlsExtendedNoAnimation_playButtonWrapper__lcIQB">
+                <button data-testid="play-pause-button" class="PlayButton_buttonWrapper___CMG4" aria-label="Play" tabindex="0">
+                    <svg data-encore-id="icon" role="img" aria-hidden="false" class="Svg-sc-ytk21e-0 eJsVCw PlayButton_playPauseIcon__EBXpd" viewBox="0 0 24 24">
+                        <title>Play</title>
+                        <path d="M1 12C1 5.925 5.925 1 12 1s11 4.925 11 11-4.925 11-11 11S1 18.075 1 12zm8.75-4.567a.5.5 0 0 0-.75.433v8.268a.5.5 0 0 0 .75.433l7.161-4.134a.5.5 0 0 0 0-.866L9.75 7.433z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="TrackList_backgroundColorContainer__vm8ks TrackListWidget_trackListContainer__zpYQe" data-testid="tracklist">
+    <div class="TrackList_opacityContainer__L_yni">
+        <div class="TrackList_wrapper__H3yYt">
+            <ol class="TrackList_trackListContainer__E6i38" aria-label="Track list">
+                <li class="TracklistRow_trackListRow__vrAAd TracklistRow_isPlayable__U6o2r" data-testid="tracklist-row-0">
+                    <div class="TracklistRow_trackNumberCell__GQdAG">
+                        <button data-testid="playback-indicator" class="TracklistRow_trackNumberCellContent__781FQ" aria-label="Play track">1</button>
+                    </div>
+                    <h3 dir="auto" class="TracklistRow_title__1RtS6">Deutschland</h3>
+                    <h4 dir="auto" class="TracklistRow_subtitle___DhJK">Rammstein</h4>
+                    <div class="TracklistRow_durationCell__CUhMO">05:22</div>
+                </li>
+                <li class="TracklistRow_trackListRow__vrAAd TracklistRow_isPlayable__U6o2r" data-testid="tracklist-row-1">
+                    <div class="TracklistRow_trackNumberCell__GQdAG">
+                        <button data-testid="playback-indicator" class="TracklistRow_trackNumberCellContent__781FQ" aria-label="Play track">2</button>
+                    </div>
+                    <h3 dir="auto" class="TracklistRow_title__1RtS6">Malenia, Blade of Miquella</h3>
+                    <h4 dir="auto" class="TracklistRow_subtitle___DhJK">Yuka Kitamura</h4>
+                    <div class="TracklistRow_durationCell__CUhMO">03:44</div>
+                </li>
+                <li class="TracklistRow_trackListRow__vrAAd TracklistRow_isPlayable__U6o2r" data-testid="tracklist-row-2">
+                    <div class="TracklistRow_trackNumberCell__GQdAG">
+                        <button data-testid="playback-indicator" class="TracklistRow_trackNumberCellContent__781FQ" aria-label="Play track">3</button>
+                    </div>
+                    <h3 dir="auto" class="TracklistRow_title__1RtS6">Ashes on The Fire (Attack on Titan The Final Season Original Soundtrack)</h3>
+                    <h4 dir="auto" class="TracklistRow_subtitle___DhJK">KOHTA YAMAMOTO</h4>
+                    <div class="TracklistRow_durationCell__CUhMO">04:34</div>
+                </li>
+                <li class="TracklistRow_trackListRow__vrAAd TracklistRow_isPlayable__U6o2r" data-testid="tracklist-row-3">
+                    <div class="TracklistRow_trackNumberCell__GQdAG">
+                        <button data-testid="playback-indicator" class="TracklistRow_trackNumberCellContent__781FQ" aria-label="Play track">4</button>
+                    </div>
+                    <h3 dir="auto" class="TracklistRow_title__1RtS6">Symphonicsuite (Aot) Part2-1st: Attack on Titan (Wmid)</h3>
+                    <h4 dir="auto" class="TracklistRow_subtitle___DhJK">Hiroyuki Sawano</h4>
+                    <div class="TracklistRow_durationCell__CUhMO">05:10</div>
+                </li>
+                <li class="TracklistRow_trackListRow__vrAAd TracklistRow_isPlayable__U6o2r" data-testid="tracklist-row-4">
+                    <div class="TracklistRow_trackNumberCell__GQdAG">
+                        <button data-testid="playback-indicator" class="TracklistRow_trackNumberCellContent__781FQ" aria-label="Play track">5</button>
+                    </div>
+                    <h3 dir="auto" class="TracklistRow_title__1RtS6">You See Big Girl / T:T</h3>
+                    <h4 dir="auto" class="TracklistRow_subtitle___DhJK">Hiroyuki Sawano</h4>
+                    <div class="TracklistRow_durationCell__CUhMO">05:59</div>
+                </li>
+                <li class="TracklistRow_trackListRow__vrAAd TracklistRow_isPlayable__U6o2r" data-testid="tracklist-row-5">
+                    <div class="TracklistRow_trackNumberCell__GQdAG">
+                        <button data-testid="playback-indicator" class="TracklistRow_trackNumberCellContent__781FQ" aria-label="Play track">6</button>
+                    </div>
+                    <h3 dir="auto" class="TracklistRow_title__1RtS6">Advent: One-Winged Angel</h3>
+                    <h4 dir="auto" class="TracklistRow_subtitle___DhJK">Nobuo Uematsu</h4>
+                    <div class="TracklistRow_durationCell__CUhMO">06:07</div>
+                </li>
+                <li class="TracklistRow_trackListRow__vrAAd" data-testid="tracklist-row-6">
+                    <div class="TracklistRow_trackNumberCell__GQdAG">
+                        <button data-testid="playback-indicator" class="TracklistRow_trackNumberCellContent__781FQ" aria-label="Play track" disabled="">7</button>
+                    </div>
+                    <h3 dir="auto" class="TracklistRow_title__1RtS6">An Enigmatic Encounter V2 (By BenLab)</h3>
+                    <h4 dir="auto" class="TracklistRow_subtitle___DhJK">Under LB</h4>
+                    <div class="TracklistRow_durationCell__CUhMO">04:00</div>
+                </li>
+                <li class="TracklistRow_trackListRow__vrAAd TracklistRow_isPlayable__U6o2r" data-testid="tracklist-row-7">
+                    <div class="TracklistRow_trackNumberCell__GQdAG">
+                        <button data-testid="playback-indicator" class="TracklistRow_trackNumberCellContent__781FQ" aria-label="Play track">8</button>
+                    </div>
+                    <h3 dir="auto" class="TracklistRow_title__1RtS6">Cha Cha Cha</h3>
+                    <h4 dir="auto" class="TracklistRow_subtitle___DhJK">Käärijä</h4>
+                    <div class="TracklistRow_durationCell__CUhMO">02:55</div>
+                </li>
+                <li class="TracklistRow_trackListRow__vrAAd TracklistRow_isPlayable__U6o2r" data-testid="tracklist-row-8">
+                    <div class="TracklistRow_trackNumberCell__GQdAG">
+                        <button data-testid="playback-indicator" class="TracklistRow_trackNumberCellContent__781FQ" aria-label="Play track">9</button>
+                    </div>
+                    <h3 dir="auto" class="TracklistRow_title__1RtS6">Godrick the Grafted</h3>
+                    <h4 dir="auto" class="TracklistRow_subtitle___DhJK">Shoi Miyazawa</h4>
+                    <div class="TracklistRow_durationCell__CUhMO">04:48</div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="OverflowMenuTracklist_wrapper__KZkjd">
+    <div class="OverflowMenuBase_wrapper__CyfQs">
+        <div class="OverflowMenuBase_menuContent__Kcicz">
+            <ul class="OverflowMenuBase_menu__cJ12M">
+                <li class="OverflowMenuBase_menuItem__0Ijn4">
+                    <a class="OverflowMenuBase_menuItemButton__YuobD" tabindex="-1" href="#playlist" target="_blank">
+                        <button class="Button-sc-1dqy6lx-0 gfQfDR OverflowMenuBase_menuItemButton__YuobD" data-encore-id="buttonTertiary">
+                            <span aria-hidden="true" class="IconWrapper__Wrapper-sc-16usrgb-0 jEDcnm">
+                                <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 24 24" class="Svg-sc-ytk21e-0 bneLcE">
+                                    <path d="M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm5.045 15.866a.686.686 0 0 1-.943.228c-2.583-1.579-5.834-1.935-9.663-1.06a.686.686 0 0 1-.306-1.337c4.19-.958 7.785-.546 10.684 1.226a.686.686 0 0 1 .228.943zm1.346-2.995a.858.858 0 0 1-1.18.282c-2.956-1.817-7.464-2.344-10.961-1.282a.856.856 0 0 1-1.11-.904.858.858 0 0 1 .611-.737c3.996-1.212 8.962-.625 12.357 1.462a.857.857 0 0 1 .283 1.179zm.116-3.119c-3.546-2.106-9.395-2.3-12.78-1.272a1.029 1.029 0 0 1-.597-1.969c3.886-1.18 10.345-.952 14.427 1.471a1.029 1.029 0 0 1-1.05 1.77z"></path>
+                                </svg>
+                            </span>
+                            <div>Play on Spotify</div>
+                        </button>
+                    </a>
+                </li>
+                <li class="OverflowMenuBase_menuItem__0Ijn4">
+                    <div data-testid="save-on-spotify" class="AddToLibrary_wrapper__FZKUv OverflowMenuBase_adaptToOverflowMenu__YeDTC">
+                        <button data-testid="save-on-spotify-button" title="Saved on Spotify" class="Button-sc-1dqy6lx-0 bTzpio SaveOnSpotifyButton_saveOnSpotifyButton__QCoJx SaveOnSpotifyButton_overflowMenu__RgKhO" aria-label="Saved on Spotify" data-encore-id="buttonTertiary">
+                            <span aria-hidden="true" class="IconWrapper__Wrapper-sc-16usrgb-0 jEDcnm">
+                                <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 24 24" class="Svg-sc-ytk21e-0 bneLcE">
+                                    <path d="M1 12C1 5.925 5.925 1 12 1s11 4.925 11 11-4.925 11-11 11S1 18.075 1 12zm16.398-2.38a1 1 0 0 0-1.414-1.413l-6.011 6.01-1.894-1.893a1 1 0 0 0-1.414 1.414l3.308 3.308 7.425-7.425z"></path>
+                                </svg>
+                            </span>
+                            <span data-testid="save-button-label" class="SaveOnSpotifyButton_saveOnSpotifyButtonText__6Jv6P SaveOnSpotifyButton_overflowMenu__RgKhO">Saved on Spotify</span>
+                        </button>
+                    </div>
+                </li>
+                    <li class="OverflowMenuBase_menuItem__0Ijn4">
+                        <button class="Button-sc-1dqy6lx-0 gfQfDR OverflowMenuBase_menuItemButton__YuobD" data-encore-id="buttonTertiary">
+                            <span aria-hidden="true" class="IconWrapper__Wrapper-sc-16usrgb-0 jEDcnm">
+                                <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 24 24" class="Svg-sc-ytk21e-0 bneLcE">
+                                    <path d="M18.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM15 5.5a3.5 3.5 0 1 1 1.006 2.455L9 12l7.006 4.045a3.5 3.5 0 1 1-.938 1.768l-6.67-3.85a3.5 3.5 0 1 1 0-3.924l6.67-3.852A3.513 3.513 0 0 1 15 5.5zm-9.5 5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm13 6.5a1.5 1.5 0 1 0-.001 3 1.5 1.5 0 0 0 .001-3z"></path>
+                                </svg>
+                            </span>
+                            <div class="CopyLink_copyLinkWrapper__rq1GN">
+                                <span class="CopyLink_copyText__NcZ1n">
+                                    <div class="CopyLink_truncator__cxtkK">Copy link</div>
+                                </span>
+                                <span class="CopyLink_copiedText__dpZb4">
+                                    <div class="CopyLink_truncator__cxtkK">Copied to clipboard</div>
+                                </span>
+                            </div>
+                        </button>
+                    </li>
+                </ul>
+                    <div class="OverflowMenuBase_policies__r_Fbu">
+                        <a class="OverflowMenuBase_link__8OQFz" href="https://www.spotify.com/legal/privacy-policy/" target="_blank">Privacy Policy</a>
+                        <span class="OverflowMenuBase_separator__l_I5t">·</span>
+                        <a class="OverflowMenuBase_link__8OQFz" href="https://www.spotify.com/legal" target="_blank">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+                <button title="Close" class="OverflowMenuBase_closeButton__pATy_">
+                    <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 24 24" class="Svg-sc-ytk21e-0 bneLcE">
+                        <path d="M3.293 3.293a1 1 0 0 1 1.414 0L12 10.586l7.293-7.293a1 1 0 1 1 1.414 1.414L13.414 12l7.293 7.293a1 1 0 0 1-1.414 1.414L12 13.414l-7.293 7.293a1 1 0 0 1-1.414-1.414L10.586 12 3.293 4.707a1 1 0 0 1 0-1.414z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"_sentryTraceData":"28f36f9a72074840a38dd2b69367d778-b605402db0b4125a-0","_sentryBaggage":"sentry-environment=production,sentry-release=bf20fd88-c355-45c2-89e2-951fec31e2a2,sentry-public_key=4cc707ab12ea4779b417479c0550a5cb,sentry-trace_id=28f36f9a72074840a38dd2b69367d778,sentry-sample_rate=0,sentry-transaction=%2Fplaylist%2F%5Bid%5D,sentry-sampled=false","state":{"data":{"entity":{"type":"playlist","name":"Mixer","uri":"spotify:playlist:374KMzuqqR1OzYfxBYcHN6","id":"374KMzuqqR1OzYfxBYcHN6","title":"Mixer","subtitle":"Hisaks","coverArt":{"extractedColors":{"colorDark":{"hex":"#767676"}},"sources":[{"height":640,"width":640,"url":"https://mosaic.scdn.co/640/ab67616d00001e0202add2c77fb6999e311a3248ab67616d00001e0236c663196e968a1f8b7d6842ab67616d00001e02c2bcff5fed95d5325eec7f91ab67616d00001e02d0f040e8048fd172454ff328"},{"height":300,"width":300,"url":"https://mosaic.scdn.co/300/ab67616d00001e0202add2c77fb6999e311a3248ab67616d00001e0236c663196e968a1f8b7d6842ab67616d00001e02c2bcff5fed95d5325eec7f91ab67616d00001e02d0f040e8048fd172454ff328"},{"height":60,"width":60,"url":"https://mosaic.scdn.co/60/ab67616d00001e0202add2c77fb6999e311a3248ab67616d00001e0236c663196e968a1f8b7d6842ab67616d00001e02c2bcff5fed95d5325eec7f91ab67616d00001e02d0f040e8048fd172454ff328"}]},"releaseDate":null,"duration":0,"maxDuration":0,"isPlayable":true,"isExplicit":false,"hasVideo":false,"relatedEntityUri":"spotify:playlist:374KMzuqqR1OzYfxBYcHN6","trackList":[{"uri":"spotify:track:2bPGTMB5sFfFYQ2YvSmup0","uid":"8ff40af094d6be53","title":"Deutschland","subtitle":"Rammstein","isExplicit":false,"duration":322339,"isPlayable":true,"audioPreview":{"format":"MP3_96","url":"https://p.scdn.co/mp3-preview/659f84b1839ff1269b987e460be94dec19758e56"}},{"uri":"spotify:track:6UHFebL0AkfsIf24mqIcNk","uid":"cf94f893460787e5","title":"Malenia, Blade of Miquella","subtitle":"Yuka Kitamura","isExplicit":false,"duration":224307,"isPlayable":true,"audioPreview":{"format":"MP3_96","url":"https://p.scdn.co/mp3-preview/8b27c81a9dfdcbe2fd6da5296bd71d5ff353a3a7"}},{"uri":"spotify:track:7uF1nTuJRGUlZzODPcmPva","uid":"f6546f8ae8cd0201","title":"Ashes on The Fire (Attack on Titan The Final Season Original Soundtrack)","subtitle":"KOHTA YAMAMOTO","isExplicit":false,"duration":274133,"isPlayable":true,"audioPreview":{"format":"MP3_96","url":"https://p.scdn.co/mp3-preview/98271dc4357f8f2fcaf20651b2b4394df45bc039"}},{"uri":"spotify:track:66EOdKkzuonSLBXOrActDD","uid":"ad835fd2df5b4f8e","title":"Symphonicsuite (Aot) Part2-1st: Attack on Titan (Wmid)","subtitle":"Hiroyuki Sawano","isExplicit":false,"duration":310693,"isPlayable":true,"audioPreview":{"format":"MP3_96","url":"https://p.scdn.co/mp3-preview/cf7222dd52d423d46ab4487c7bf9dc6f85c380b5"}},{"uri":"spotify:track:4dHOnPucB5VBYq3gjRtYy9","uid":"03833466fe1187fc","title":"You See Big Girl / T:T","subtitle":"Hiroyuki Sawano","isExplicit":false,"duration":359346,"isPlayable":true,"audioPreview":{"format":"MP3_96","url":"https://p.scdn.co/mp3-preview/b41c8caa2cd3c93a7bf0b822d34f44fd2ebd295c"}},{"uri":"spotify:track:0BAWoUYQ9YPIn5DuBRnbcE","uid":"fa430914c1695068","title":"Advent: One-Winged Angel","subtitle":"Nobuo Uematsu","isExplicit":false,"duration":367013,"isPlayable":true,"audioPreview":{"format":"MP3_96","url":"https://p.scdn.co/mp3-preview/5a058465d6f45f105efafe48c38afe2fb26225ab"}},{"uri":"spotify:track:00nlHkYFpk31MIEIQwMiMP","uid":"ff2738de8ddc77a8","title":"An Enigmatic Encounter V2 (By BenLab)","subtitle":"Under LB","isExplicit":false,"duration":240346,"isPlayable":false,"audioPreview":null},{"uri":"spotify:track:5RX8T3EoTuXcybAxe6oPAw","uid":"226b98bac1231f80","title":"Cha Cha Cha","subtitle":"Käärijä","isExplicit":false,"duration":175161,"isPlayable":true,"audioPreview":{"format":"MP3_96","url":"https://p.scdn.co/mp3-preview/8ab21713528f10594017365148e7f4cc0a29da89"}},{"uri":"spotify:track:4n9sc7oeRfn5fwiHkog3vC","uid":"66de1a79426045d6","title":"Godrick the Grafted","subtitle":"Shoi Miyazawa","isExplicit":false,"duration":288144,"isPlayable":true,"audioPreview":{"format":"MP3_96","url":"https://p.scdn.co/mp3-preview/65c42b2b4ebf9df73774731e6cf2ee03d7fc8799"}}]},"embeded_entity_uri":"spotify:playlist:374KMzuqqR1OzYfxBYcHN6","defaultAudioFileObject":{"passthrough":"NONE"},"backgroundColor":"#767676"},"settings":{"rtl":false,"session":{"accessToken":"BQCz5Jhg1G4JArdhhRNZOMZhmkLxLEMejp_mHCLnr9Ct-zndX-dSMmGAOZng9Eimsls43SU8WyQR6bMo4Uxj29Ml48k8DB8FjFeO3okz0ZA2HwD66E7LbNe0HBgCUnV1xF60ISzo-M6-j3WRsKmpY_0SXwOdtgOrVKAHSRM_0Yq72-OyF8LUMFblA_rIlLt5yMpx4sIaUUpmtsKu5YRA97feagZOOxFxbzZ-94wOLc2_","accessTokenExpirationTimestampMs":1713812730731,"isAnonymous":false},"entityContext":"playlist","clientId":"ab9ad0d96a624805a7d51e8868df1f97","isPremiumOnlyMarket":false,"isMobile":false,"isSafari":false,"isIOS":false,"isTablet":false}},"config":{"correlationId":"addcf9d67e82c7409c08336cfb29e4d3","strings":{"en":{"translation":{}}},"locale":"en","clientId":"ab9ad0d96a624805a7d51e8868df1f97"}},"__N_SSP":true},"page":"/playlist/[id]","query":{"utm_source":"generator","id":"374KMzuqqR1OzYfxBYcHN6"},"buildId":"bf20fd88-c355-45c2-89e2-951fec31e2a2","assetPrefix":"https://embed-cdn.spotifycdn.com","isFallback":false,"gssp":true,"appGip":true,"scriptLoader":[]}</script>
+<next-route-announcer>
+    <p aria-live="assertive" id="__next-route-announcer__" role="alert" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; top: 0px; width: 1px; white-space: nowrap; overflow-wrap: normal;"></p>
+</next-route-announcer>
+</body>
+<!--<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/374KMzuqqR1OzYfxBYcHN6?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>-->

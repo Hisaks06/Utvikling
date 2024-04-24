@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chrome T-Rex Game</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+  }
+  canvas {
+    display: block;
+    margin: auto;
+    background-color: #f7f7f7;
+  }
+</style>
+</head>
+<body>
+<canvas id="gameCanvas" width="600" height="200"></canvas>
+
+<script>
+  // Get the canvas and its context
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+
+  // Set initial position and size of the T-Rex
+  let trexX = 50;
+  let trexY = 150;
+  const trexWidth = 40;
+  const trexHeight = 40;
+
+  // Set initial velocity and gravity
+  let trexVelocityY = 0;
+  const gravity = 1.5;
+
+  // Function to draw the T-Rex
+  function drawTrex() {
+    ctx.fillStyle = "#666";
+    ctx.fillRect(trexX, trexY, trexWidth, trexHeight);
+  }
+
+  // Function to update the T-Rex position
+  function updateTrex() {
+    trexVelocityY += gravity;
+    trexY += trexVelocityY;
+
+    // Check for ground collision
+    if (trexY + trexHeight > canvas.height) {
+      trexY = canvas.height - trexHeight;
+      trexVelocityY = 0;
+    }
+  }
+
+  // Main game loop
+  function gameLoop() {
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the T-Rex
+    drawTrex();
+
+    // Update the T-Rex position
+    updateTrex();
+
+    // Request next frame
+    requestAnimationFrame(gameLoop);
+  }
+
+  // Start the game loop
+  gameLoop();
+</script>
+</body>
+</html>

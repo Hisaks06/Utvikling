@@ -1,5 +1,6 @@
 const multer = require('multer');
 const express = require("express");
+const cors = require('cors');
 const path = require("path");
 const bcrypt = require("bcrypt");
 const sqlite3 = require('better-sqlite3');
@@ -15,6 +16,12 @@ const app = express();
 const staticPath = path.join(__dirname, 'public');
 
 app.use(express.urlencoded({ extended: true }));
+
+// Add middleware to parse incoming JSON data
+app.use(express.json());
+
+// Configure CORS to allow requests from your client's origin
+app.use(cors());
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -163,6 +170,29 @@ function getUserById(userId) {
     return user;
 }
 
+// Route to handle user creation by admin
+app.post('/admin/project', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/project');
+
+    // Log the request body
+    console.log('Request body:', req.body);
+
+    // Extract user data from the request body
+    const { name, description, category, status, completedBy } = req.body;
+
+    // Add the new user to the database
+    const project = addProject(name, description, category, status, completedBy);
+    
+    if (project) {
+        // Return success response if user is added successfully
+        res.status(201).json({ success: true, message: 'project added successfully', project: project });
+    } else {
+        // Return error response if user addition fails
+        res.status(500).json({ success: false, error: 'Failed to add project' });
+    }
+});
+
 // Update a project record
 app.put('/projects/:id', (req, res) => {
     const projectId = req.params.id;
@@ -205,48 +235,102 @@ app.delete('/projects/:id', (req, res) => {
     }
 });
 
-// Update a users record
-app.put('/users/:id', (req, res) => {
-    const usersId = req.params.id;
+// Route to handle user creation by admin
+app.post('/admin/user', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/user');
+
+    // Log the request body
+    console.log('Request body:', req.body);
+
+    // Extract user data from the request body
     const { username, firstname, lastname, email, password, mobile, age, idrole } = req.body;
 
+    if (!password) {
+        return res.status(400).json({ success: false, error: 'Password is required' });
+    }
+
+    // Hash the password
+    const hash = bcrypt.hashSync(password, saltRounds);
+
+    // Add the new user to the database
+    const user = addUser(username, firstname, lastname, email, hash, mobile, age, idrole);
+    
+    if (user) {
+        // Return success response if user is added successfully
+        res.status(201).json({ success: true, message: 'User added successfully', user: user });
+    } else {
+        // Return error response if user addition fails
+        res.status(500).json({ success: false, error: 'Failed to add user' });
+    }
+});
+
+// Route to handle editing user profile by admin
+app.put('/admin/user/:id', checkAdmin, (req, res) => {
+    const userId = req.params.id;
+    const { username, firstname, lastname, email, mobile, age, idrole } = req.body;
+
     try {
+        // Update user information in the database
         const updateQuery = `
             UPDATE user 
             SET username = ?, 
                 firstname = ?, 
                 lastname = ?, 
                 email = ?, 
-                password = ?,
                 mobile = ?, 
                 age = ?, 
                 idrole = ?
             WHERE id = ?`;
 
         const stmt = db.prepare(updateQuery);
-        stmt.run(username, firstname, lastname, email, password, mobile, age, idrole, usersId);
-        res.status(200).json({ success: true });
+        stmt.run(username, firstname, lastname, email, mobile, age, idrole, userId);
+        res.status(200).json({ success: true }); // Send success response
     } catch (error) {
         console.error('Error updating user:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
+        res.status(500).json({ success: false, error: 'Internal Server Error' }); // Internal server error
     }
 });
 
-// Delete a users record
-app.delete('/users/:id', (req, res) => {
-    const usersId = req.params.id;
+// Route to handle deleting a user by admin
+app.delete('/admin/user/:id', checkAdmin, (req, res) => {
+    const userId = req.params.id;
 
     try {
+        // Delete user from the database
         const deleteQuery = `
             DELETE FROM user
             WHERE id = ?`;
 
         const stmt = db.prepare(deleteQuery);
-        stmt.run(usersId);
-        res.status(200).json({ success: true });
+        stmt.run(userId);
+        res.status(200).json({ success: true }); // Send success response
     } catch (error) {
         console.error('Error deleting user:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
+        res.status(500).json({ success: false, error: 'Internal Server Error' }); // Internal server error
+    }
+});
+
+// Route to handle user creation by admin
+app.post('/admin/role', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/role');
+
+    // Log the request body
+    console.log('Request body:', req.body);
+
+    // Extract user data from the request body
+    const { name } = req.body;
+
+    // Add the new user to the database
+    const role = addRole(name);
+    
+    if (role) {
+        // Return success response if user is added successfully
+        res.status(201).json({ success: true, message: 'role added successfully', role: role });
+    } else {
+        // Return error response if user addition fails
+        res.status(500).json({ success: false, error: 'Failed to add role' });
     }
 });
 
@@ -285,6 +369,29 @@ app.delete('/role/:id', (req, res) => {
     } catch (error) {
         console.error('Error deleting role:', error);
         res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// Route to handle category creation by admin
+app.post('/admin/category', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/category');
+
+    // Log the request body
+    console.log('Request body:', req.body);
+
+    // Extract category data from the request body
+    const { name } = req.body;
+
+    // Add the new category to the database
+    const category = addCategory(name);
+    
+    if (category) {
+        // Return success response if category is added successfully
+        res.status(201).json({ success: true, message: 'category added successfully', category: category });
+    } else {
+        // Return error response if category addition fails
+        res.status(500).json({ success: false, error: 'Failed to add category' });
     }
 });
 
@@ -404,6 +511,78 @@ app.get('/categories/data', (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+// Define a route to handle admin operations for a specific user
+app.get('/admin/user/:id', checkAdmin, (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        // Query the database to fetch user details by user ID
+        const sql = db.prepare(`
+            SELECT user.id, user.username, user.firstname, user.lastname, user.email, user.mobile, user.age, role.name AS role
+            FROM user
+            INNER JOIN role ON user.idrole = role.id
+            WHERE user.id = ?
+        `);
+        const user = sql.get(userId);
+
+        if (user) {
+            res.json(user); // Send user details as JSON response
+        } else {
+            res.status(404).json({ error: 'User not found' }); // User with given ID not found
+        }
+    } catch (error) {
+        console.error('Error fetching user data from database:', error);
+        res.status(500).json({ error: 'Internal Server Error' }); // Internal server error
+    }
+});
+
+// Route to update user information
+app.put('/admin/user/:id', checkAdmin, (req, res) => {
+    const userId = req.params.id;
+    const { username, firstname, lastname, email, mobile, age, idrole } = req.body;
+
+    try {
+        // Update user information in the database
+        const updateQuery = `
+            UPDATE user 
+            SET username = ?, 
+                firstname = ?, 
+                lastname = ?, 
+                email = ?, 
+                mobile = ?, 
+                age = ?, 
+                idrole = ?
+            WHERE id = ?`;
+
+        const stmt = db.prepare(updateQuery);
+        stmt.run(username, firstname, lastname, email, mobile, age, idrole, userId);
+        res.status(200).json({ success: true }); // Send success response
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' }); // Internal server error
+    }
+});
+
+// Route to delete a user
+app.delete('/admin/user/:id', checkAdmin, (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        // Delete user from the database
+        const deleteQuery = `
+            DELETE FROM user
+            WHERE id = ?`;
+
+        const stmt = db.prepare(deleteQuery);
+        stmt.run(userId);
+        res.status(200).json({ success: true }); // Send success response
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' }); // Internal server error
+    }
+});
+
 
 // Route to serve admin.html, protected by checkAdmin middleware
 app.get('/admin', checkAdmin, (req, res) => {

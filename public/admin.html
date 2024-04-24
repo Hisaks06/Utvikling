@@ -60,6 +60,8 @@
                     <input type="text" id="firstname" name="firstname" required><br>
                     <label for="lastname">Last Name:</label>
                     <input type="text" id="lastname" name="lastname" required><br>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required><br>
                     <label for="email">Email:</label>
                     <input type="text" id="email" name="email" required><br>
                     <label for="mobile">Mobile:</label>
@@ -95,18 +97,18 @@
         <!-- Add Project Modal -->
         <div id="addProjectModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <form id="addProjectForm">
+                <span class="close">×</span>
+                <form id="addProjectForm" style="display: none;">
                     <h2>Add Project</h2>
                     <br>
                     <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required><br>
+                    <input type="text" id="name" name="name" required=""><br>
                     <label for="description">Description:</label>
-                    <input type="text" id="description" name="description" required><br>
+                    <input type="text" id="description" name="description" required=""><br>
                     <label for="category">Category:</label>
-                    <input type="text" id="category" name="category" required><br>
+                    <select name="category" id="categorySelect"></select><br>
                     <label for="status">Status:</label>
-                    <input type="text" id="status" name="status" required><br>
+                    <input type="text" id="status" name="status" required=""><br>
                     <label for="completedBy">Completed By:</label>
                     <input type="text" id="completedBy" name="completedBy"><br>
                     <button type="submit">Add Project</button>
