@@ -430,7 +430,7 @@ function deleteRole(roleId) {
     }
 
     // Send a DELETE request to delete the role by roleId
-    fetch(`/admin/roles/${roleId}`, {
+    fetch(`/admin/role/${roleId}`, { // Use backticks for string interpolation
         method: 'DELETE'
     })
     .then(response => {
@@ -452,7 +452,6 @@ function deleteRole(roleId) {
         alert('Network error. Please try again later.');
     });
 }
-
 
 // Function to handle form submission for adding a role
 function addRole(event) {
