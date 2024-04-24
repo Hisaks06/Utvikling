@@ -59,6 +59,7 @@ app.post('/register', (req, res) => {
         req.session.userrole = user.role;
         req.session.userid = user.userid;
         res.send(true);
+        res.sendFile(path.join(__dirname, "public/app.html"));
     } else {
         res.send(false);
     }
@@ -168,6 +169,25 @@ function getUserById(userId) {
     const sql = db.prepare('SELECT user.id as userid, username, role.name as role FROM user INNER JOIN role ON user.idrole = role.id WHERE user.id = ?');
     const user = sql.get(userId);
     return user;
+}
+
+function addProject(name, description, category, status, completedBy) {
+    const sql = db.prepare("INSERT INTO project (name, description, category, status, completedBy) VALUES (?, ?, ?, ?, ?)");
+    try {
+        const info = sql.run(name, description, category, status, completedBy);
+        const insertedProjectId = info.lastInsertRowid;
+        const project = getProjectById(insertedProjectId);
+        return project;
+    } catch (error) {
+        console.error("Error adding project:", error);
+        return null;
+    }
+}
+
+function getProjectById(projectId) {
+    const sql = db.prepare('SELECT * FROM project WHERE id = ?');
+    const project = sql.get(projectId);
+    return project;
 }
 
 // Route to handle user creation by admin
@@ -311,6 +331,25 @@ app.delete('/admin/user/:id', checkAdmin, (req, res) => {
     }
 });
 
+function addRole(name) {
+    const sql = db.prepare("INSERT INTO role (name) VALUES (?)");
+    try {
+        const info = sql.run(name);
+        const insertedRoleId = info.lastInsertRowid;
+        const role = getRoleById(insertedRoleId);
+        return role;
+    } catch (error) {
+        console.error("Error adding role:", error);
+        return null;
+    }
+}
+
+function getRoleById(roleId) {
+    const sql = db.prepare('SELECT * FROM role WHERE id = ?');
+    const role = sql.get(roleId);
+    return role;
+}
+
 // Route to handle user creation by admin
 app.post('/admin/role', checkAdmin, (req, res) => {
     // Log when a request is received
@@ -320,10 +359,10 @@ app.post('/admin/role', checkAdmin, (req, res) => {
     console.log('Request body:', req.body);
 
     // Extract user data from the request body
-    const { name } = req.body;
+    const { rolename } = req.body;
 
     // Add the new user to the database
-    const role = addRole(name);
+    const role = addRole(rolename);
     
     if (role) {
         // Return success response if user is added successfully
@@ -372,6 +411,25 @@ app.delete('/role/:id', (req, res) => {
     }
 });
 
+function addCategory(name) {
+    const sql = db.prepare("INSERT INTO category (name) VALUES (?)");
+    try {
+        const info = sql.run(name);
+        const insertedCategoryId = info.lastInsertRowid;
+        const category = getCategoryById(insertedCategoryId);
+        return category;
+    } catch (error) {
+        console.error("Error adding category:", error);
+        return null;
+    }
+}
+
+function getCategoryById(categoryId) {
+    const sql = db.prepare('SELECT * FROM category WHERE id = ?');
+    const category = sql.get(categoryId);
+    return category;
+}
+
 // Route to handle category creation by admin
 app.post('/admin/category', checkAdmin, (req, res) => {
     // Log when a request is received
@@ -381,10 +439,10 @@ app.post('/admin/category', checkAdmin, (req, res) => {
     console.log('Request body:', req.body);
 
     // Extract category data from the request body
-    const { name } = req.body;
+    const { categoryname } = req.body;
 
     // Add the new category to the database
-    const category = addCategory(name);
+    const category = addCategory(categoryname);
     
     if (category) {
         // Return success response if category is added successfully

@@ -51,6 +51,20 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchCategories();
 });
 
+function createTableRow(data) {
+    // Create a new table row
+    const row = document.createElement('tr');
+
+    // Create a new table data cell for each property in data
+    for (const prop in data) {
+        const cell = document.createElement('td');
+        cell.textContent = data[prop];
+        row.appendChild(cell);
+    }
+
+    return row;
+}
+
 // Fetch role names from the server and populate the dropdown
 async function fetchRoles() {
     try {
