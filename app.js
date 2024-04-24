@@ -1,5 +1,6 @@
 const multer = require('multer');
 const express = require("express");
+const cors = require('cors');
 const path = require("path");
 const bcrypt = require("bcrypt");
 const sqlite3 = require('better-sqlite3');
@@ -15,6 +16,12 @@ const app = express();
 const staticPath = path.join(__dirname, 'public');
 
 app.use(express.urlencoded({ extended: true }));
+
+// Add middleware to parse incoming JSON data
+app.use(express.json());
+
+// Configure CORS to allow requests from your client's origin
+app.use(cors());
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -52,6 +59,7 @@ app.post('/register', (req, res) => {
         req.session.userrole = user.role;
         req.session.userid = user.userid;
         res.send(true);
+        res.sendFile(path.join(__dirname, "public/app.html"));
     } else {
         res.send(false);
     }
@@ -163,6 +171,48 @@ function getUserById(userId) {
     return user;
 }
 
+function addProject(name, description, category, status, completedBy) {
+    const sql = db.prepare("INSERT INTO project (name, description, category, status, completedBy) VALUES (?, ?, ?, ?, ?)");
+    try {
+        const info = sql.run(name, description, category, status, completedBy);
+        const insertedProjectId = info.lastInsertRowid;
+        const project = getProjectById(insertedProjectId);
+        return project;
+    } catch (error) {
+        console.error("Error adding project:", error);
+        return null;
+    }
+}
+
+function getProjectById(projectId) {
+    const sql = db.prepare('SELECT * FROM project WHERE id = ?');
+    const project = sql.get(projectId);
+    return project;
+}
+
+// Route to handle user creation by admin
+app.post('/admin/project', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/project');
+
+    // Log the request body
+    console.log('Request body:', req.body);
+
+    // Extract user data from the request body
+    const { name, description, category, status, completedBy } = req.body;
+
+    // Add the new user to the database
+    const project = addProject(name, description, category, status, completedBy);
+    
+    if (project) {
+        // Return success response if user is added successfully
+        res.status(201).json({ success: true, message: 'project added successfully', project: project });
+    } else {
+        // Return error response if user addition fails
+        res.status(500).json({ success: false, error: 'Failed to add project' });
+    }
+});
+
 // Update a project record
 app.put('/projects/:id', (req, res) => {
     const projectId = req.params.id;
@@ -207,14 +257,24 @@ app.delete('/projects/:id', (req, res) => {
 
 // Route to handle user creation by admin
 app.post('/admin/user', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/user');
 
-    const hash = bcrypt.hashSync(password, saltRounds);
+    // Log the request body
+    console.log('Request body:', req.body);
 
     // Extract user data from the request body
     const { username, firstname, lastname, email, password, mobile, age, idrole } = req.body;
 
+    if (!password) {
+        return res.status(400).json({ success: false, error: 'Password is required' });
+    }
+
+    // Hash the password
+    const hash = bcrypt.hashSync(password, saltRounds);
+
     // Add the new user to the database
-    const user = addUser(username, firstname, lastname, email, password, mobile, age, idrole);
+    const user = addUser(username, firstname, lastname, email, hash, mobile, age, idrole);
     
     if (user) {
         // Return success response if user is added successfully
@@ -271,6 +331,47 @@ app.delete('/admin/user/:id', checkAdmin, (req, res) => {
     }
 });
 
+function addRole(name) {
+    const sql = db.prepare("INSERT INTO role (name) VALUES (?)");
+    try {
+        const info = sql.run(name);
+        const insertedRoleId = info.lastInsertRowid;
+        const role = getRoleById(insertedRoleId);
+        return role;
+    } catch (error) {
+        console.error("Error adding role:", error);
+        return null;
+    }
+}
+
+function getRoleById(roleId) {
+    const sql = db.prepare('SELECT * FROM role WHERE id = ?');
+    const role = sql.get(roleId);
+    return role;
+}
+
+// Route to handle user creation by admin
+app.post('/admin/role', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/role');
+
+    // Log the request body
+    console.log('Request body:', req.body);
+
+    // Extract user data from the request body
+    const { rolename } = req.body;
+
+    // Add the new user to the database
+    const role = addRole(rolename);
+    
+    if (role) {
+        // Return success response if user is added successfully
+        res.status(201).json({ success: true, message: 'role added successfully', role: role });
+    } else {
+        // Return error response if user addition fails
+        res.status(500).json({ success: false, error: 'Failed to add role' });
+    }
+});
 
 // Update a role record
 app.put('/role/:id', (req, res) => {
@@ -307,6 +408,48 @@ app.delete('/role/:id', (req, res) => {
     } catch (error) {
         console.error('Error deleting role:', error);
         res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+function addCategory(name) {
+    const sql = db.prepare("INSERT INTO category (name) VALUES (?)");
+    try {
+        const info = sql.run(name);
+        const insertedCategoryId = info.lastInsertRowid;
+        const category = getCategoryById(insertedCategoryId);
+        return category;
+    } catch (error) {
+        console.error("Error adding category:", error);
+        return null;
+    }
+}
+
+function getCategoryById(categoryId) {
+    const sql = db.prepare('SELECT * FROM category WHERE id = ?');
+    const category = sql.get(categoryId);
+    return category;
+}
+
+// Route to handle category creation by admin
+app.post('/admin/category', checkAdmin, (req, res) => {
+    // Log when a request is received
+    console.log('Received POST request to /admin/category');
+
+    // Log the request body
+    console.log('Request body:', req.body);
+
+    // Extract category data from the request body
+    const { categoryname } = req.body;
+
+    // Add the new category to the database
+    const category = addCategory(categoryname);
+    
+    if (category) {
+        // Return success response if category is added successfully
+        res.status(201).json({ success: true, message: 'category added successfully', category: category });
+    } else {
+        // Return error response if category addition fails
+        res.status(500).json({ success: false, error: 'Failed to add category' });
     }
 });
 

@@ -48,7 +48,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch role names from the server and populate the dropdown
     fetchRoles();
+    fetchCategories();
 });
+
+function createTableRow(data) {
+    // Create a new table row
+    const row = document.createElement('tr');
+
+    // Create a new table data cell for each property in data
+    for (const prop in data) {
+        const cell = document.createElement('td');
+        cell.textContent = data[prop];
+        row.appendChild(cell);
+    }
+
+    return row;
+}
 
 // Fetch role names from the server and populate the dropdown
 async function fetchRoles() {
@@ -64,6 +79,23 @@ async function fetchRoles() {
         });
     } catch (error) {
         console.error('Failed to fetch roles:', error);
+    }
+}
+
+// Fetch role names from the server and populate the dropdown
+async function fetchCategories() {
+    try {
+        const response = await fetch('/category');
+        const categories = await response.json();
+        const categorySelect = document.getElementById('categorySelect');
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id;
+            option.textContent = category.name;
+            categorySelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Failed to fetch categories:', error);
     }
 }
 
@@ -257,14 +289,27 @@ if (response.ok) {
 function addUser(event) {
     event.preventDefault();
 
-    // Get form data
-    const formData = new FormData(document.getElementById('addUserForm'));
+// Convert FormData to JSON
+const formData = new FormData(document.getElementById('addUserForm'));
+let formDataJSON = Object.fromEntries(formData.entries());
 
-    // Send POST request to server with form data
-    fetch('/admin/user', {
-        method: 'POST',
-        body: formData
-    })
+// Rename 'role' field to 'idrole'
+if (formDataJSON.role) {
+    formDataJSON.idrole = formDataJSON.role;
+    delete formDataJSON.role;
+}
+
+// Log the data that's being sent to the server
+console.log('Data being sent to server:', formDataJSON);
+
+// Send POST request to server with form data
+fetch('/admin/user', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formDataJSON)
+})
     .then(response => {
         if (!response.ok) {
             throw new Error('Failed to add user');
@@ -279,11 +324,6 @@ function addUser(event) {
         const newRow = createTableRow(data);
         document.getElementById('adminDataBody').appendChild(newRow);
     })
-    .catch(error => {
-        console.error('Error adding user:', error);
-        // Display error message to the user
-        alert('Failed to add user. Please try again.');
-    });
 }
 
 // Function to handle edit project
@@ -330,13 +370,25 @@ function addProject(event) {
 
     // Get form data
     const formData = new FormData(document.getElementById('addProjectForm'));
+    let formDataJSON = Object.fromEntries(formData.entries());
+
+    // Log the data that's being sent to the server
+    console.log('Data being sent to server:', formDataJSON);
 
     // Send POST request to server with form data
     fetch('/admin/project', {
         method: 'POST',
-        body: formData
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDataJSON)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to add project');
+        }
+        return response.json();
+    })
     .then(data => {
         // Close the modal
         document.getElementById('projectDataBody').style.display = 'none';
@@ -388,13 +440,24 @@ function addRole(event) {
 
     // Get form data
     const formData = new FormData(document.getElementById('addRoleForm'));
+    let formDataJSON = Object.fromEntries(formData.entries());
 
+    // Log the data that's being sent to the server
+console.log('Data being sent to server:', formDataJSON);
     // Send POST request to server with form data
     fetch('/admin/role', {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDataJSON)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to add role');
+        }
+        return response.json();
+    })
     .then(data => {
         // Close the modal
         document.getElementById('roleDataBody').style.display = 'none';
@@ -446,13 +509,25 @@ function addCategory(event) {
 
     // Get form data
     const formData = new FormData(document.getElementById('addCategoryForm'));
+    let formDataJSON = Object.fromEntries(formData.entries());
+
+    // Log the data that's being sent to the server
+    console.log('Data being sent to server:', formDataJSON);
 
     // Send POST request to server with form data
     fetch('/admin/category', {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDataJSON)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to add category');
+        }
+        return response.json();
+    })
     .then(data => {
         // Close the modal
         document.getElementById('categoryDataBody').style.display = 'none';
