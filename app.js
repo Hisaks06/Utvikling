@@ -83,7 +83,6 @@ function addUser(username, firstname, lastname, email, password, mobile, age, id
     }
 }
 
-
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, "public/login.html"));
 });
@@ -125,7 +124,6 @@ app.post('/editProfile', (req, res) => {
     }
 });
 
-
 function checkUserPassword(username, password) {
     const sql = db.prepare(`
         SELECT user.id AS userid, username, role.name AS role, password 
@@ -140,7 +138,6 @@ function checkUserPassword(username, password) {
         return null;
     }
 }
-
 
 // Middleware to check if the user is logged in
 function checkLoggedIn(req, res, next) {
